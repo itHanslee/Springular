@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "sistema_de_vacunacion": {
+    "sistema_de_vacuancion": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -26,15 +26,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "security": {
-              "allowedHosts": []
-            },
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -64,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sistema_de_vacunacion:build:production"
+              "buildTarget": "sistema_de_vacuancion:build:production"
             },
             "development": {
-              "buildTarget": "sistema_de_vacunacion:build:development"
+              "buildTarget": "sistema_de_vacuancion:build:development"
             }
           },
           "defaultConfiguration": "development"
