@@ -1,1 +1,215 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   1. IMPORTACIÓN DE FUENTES (Opcional pero recomendado para el estilo del PDF)
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ==========================================================================
+   2. VARIABLES GLOBALES (Basado en tu paleta y diseño)
+   ========================================================================== */
+:root {
+  /* Paleta de Colores Principal */
+  --color-primary-dark: #1E4A3D;   /* Verde oscuro (Textos principales, hover del menú) */
+  --color-primary: #2D9A7B;        /* Verde medio (Botones, menú lateral, iconos) */
+  --color-primary-alt: #2E9A7B;    /* Variante del verde principal */
+  --color-primary-light: #C5ECDD;  /* Verde menta claro (Fondos suaves, bordes, estados activos) */
+  --color-background: #FEFEFE;     /* Blanco roto (Fondo general de la app) */
+  --color-surface: #FFFFFF;        /* Blanco puro (Para tarjetas y contenedores) */
+  
+  /* Colores de Texto adicionales para contraste */
+  --color-text-main: #333333;
+  --color-text-muted: #6B7280;
+  
+  /* Tipografía */
+  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Radios de borde observados en el diseño */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;     /* Para tarjetas y tablas */
+  --border-radius-pill: 50px;  /* Para botones redondeados y botones del menú */
+  
+  /* Sombras */
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+/* ==========================================================================
+   3. RESET Y BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Encabezados y títulos (Como "Mi carné", "Auditorias globales") */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   4. COMPONENTES GLOBALES
+   ========================================================================== */
+
+/* Tarjetas (Cards blancas con sombra suave) */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-card);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(197, 236, 221, 0.3); /* Un toque sutil del verde claro */
+}
+
+/* Botones (Como "Descargar", "Exportar PDF") */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  text-decoration: none;
+}
+
+/* Botón sólido verde */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Botón con contorno (Como los de Exportar PDF/Excel) */
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  border-radius: var(--border-radius-md);
+}
+
+.btn-outline:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+/* ==========================================================================
+   5. FORMULARIOS E INPUTS (Como los de "Buscar por nombre")
+   ========================================================================== */
+.form-control {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--border-radius-md);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--color-text-main);
+  background-color: var(--color-surface);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(45, 154, 123, 0.15); /* Halo verde al hacer focus */
+}
+
+.form-control::placeholder {
+  color: #9CA3AF;
+}
+
+/* ==========================================================================
+   6. TABLAS DE DATOS GLOBALES (Como "Historial de dosis recibidas")
+   ========================================================================== */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.table th, 
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.table th {
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  /* Fondo sutil usando el verde claro de la paleta */
+  background-color: rgba(197, 236, 221, 0.15); 
+}
+
+.table tbody tr:hover {
+  background-color: rgba(197, 236, 221, 0.05);
+}
+
+/* ==========================================================================
+   7. MENÚ LATERAL (Sidebar items - estilo píldora verde)
+   ========================================================================== */
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--border-radius-md);
+  color: #FFFFFF;
+  background-color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active {
+  background-color: var(--color-primary-dark);
+}
+
+/* Íconos dentro del sidebar */
+.sidebar-item svg,
+.sidebar-item i {
+  font-size: 1.2rem;
+}
