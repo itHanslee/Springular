@@ -8,7 +8,7 @@
     (input)="buscarVacunas($any($event.target).value)"/>
     </div>
     <button class="btn-primario" type="button" (click)="buscarVacunas(inputBusqueda.value)">
-     Buscar
+     <i class="bi bi-search"></i> Buscar
     </button>
   </div>
  
@@ -26,7 +26,7 @@
           <tr>
             <td>{{ vacuna.nombre }}</td>
             <td>{{ vacuna.numeroLote }}</td>
-            <td>{{ vacuna.dosisTotales }}</td>
+            <td>{{ vacuna.stock }}</td>
             <td>{{ vacuna.fechaVencimiento | date }}</td>
           </tr>
         }

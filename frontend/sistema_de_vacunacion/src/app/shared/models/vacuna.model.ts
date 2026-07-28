@@ -10,6 +10,7 @@ export interface Vacuna {
     dosisTotales: number;
     viaAdministracion: viaAdministracion;
     temperaturaAlmacenamiento: number;
+    stock: number;
     estado: estadoVacuna;
     fechaVencimiento: Date;
 }
