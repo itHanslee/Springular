@@ -1,13 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <p>
-        hola mundo
-    </p>
-</body>
-</html>
+<!-- feature/personal_salud/ciudadanos/ciudadanos.html -->
+<section class="ciudadanos">
+  <h1>Ciudadanos</h1>
+  <p class="subtitulo">Registro y consulta de información de ciudadanos</p>
+
+  <div class="toolbar">
+    <div class="campo-busqueda">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21 L16.65 16.65"/>
+      </svg>
+      <input
+        type="text"
+        placeholder="Buscar por documento"
+        (input)="buscar($any($event.target).value)"
+      />
+    </div>
+
+    <button class="btn-primario" (click)="toggleFormulario()">
+      <span>{{ mostrarFormulario() ? '✕' : '+' }}</span> Registrar
+    </button>
+  </div>
+
+  @if (mostrarFormulario()) {
+    <form [formGroup]="form" (ngSubmit)="registrar()" class="form-nuevo">
+      <div class="campo">
+        <label>Nombre completo</label>
+        <input formControlName="nombre" placeholder="Ej. María Ortíz" />
+        @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
+          <span class="error">Este campo es obligatorio</span>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Documento</label>
+        <input formControlName="documento" placeholder="Ej. 1048XXXXXXX" />
+        @if (form.get('documento')?.invalid && form.get('documento')?.touched) {
+          <span class="error">Este campo es obligatorio</span>
+        }
+      </div>
+
+      <div class="campo">
+        <label>Edad</label>
+        <input formControlName="edad" type="number" placeholder="Ej. 18" />
+        @if (form.get('edad')?.invalid && form.get('edad')?.touched) {
+          <span class="error">Ingresa una edad válida</span>
+        }
+      </div>
+
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid">
+        Guardar
+      </button>
+    </form>
+  }
+
+  @if (cargando()) {
+    <p class="estado-carga">Cargando ciudadanos...</p>
+  } @else {
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Documento</th>
+          <th>Edad</th>
+          <th>Última vacuna aplicada</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ciudadano of ciudadanosFiltrados(); track ciudadano.id) {
+          <tr>
+            <td>{{ ciudadano.nombre }}</td>
+            <td>{{ ciudadano.documento }}</td>
+            <td>{{ ciudadano.edad }}</td>
+            <td>{{ ciudadano.ultimaVacunaAplicada || '—' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (!hayResultados()) {
+      <p class="sin-resultados">No se encontraron ciudadanos con ese criterio.</p>
+    }
+  }
+</section>

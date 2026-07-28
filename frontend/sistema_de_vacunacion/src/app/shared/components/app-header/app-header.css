@@ -1,0 +1,17 @@
+/* app-header.css */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-primary-dark);
+  color: white;
+  padding: 0.9rem 2rem;
+}
+.logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.2rem; }
+.usuario { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
+.avatar {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}

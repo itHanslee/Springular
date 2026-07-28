@@ -5,6 +5,7 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "rootDir": "./src",
+    "types": ["jasmine"],
     "typeRoots": [
       "./node_modules/@types"
     ]

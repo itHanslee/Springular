@@ -1,0 +1,8 @@
+<!-- app-sidebar.html -->
+<nav class="sidebar">
+  @for (item of items; track item.ruta) {
+    <a [routerLink]="item.ruta" routerLinkActive="activo" class="sidebar-item">
+      {{ item.label }}
+    </a>
+  }
+</nav>
