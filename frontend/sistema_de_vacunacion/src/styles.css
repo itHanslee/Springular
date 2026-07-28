@@ -7,28 +7,17 @@
    2. VARIABLES GLOBALES (Basado en tu paleta y diseño)
    ========================================================================== */
 :root {
-  /* Paleta de Colores Principal */
-  --color-primary-dark: #1E4A3D;   /* Verde oscuro (Textos principales, hover del menú) */
-  --color-primary: #2D9A7B;        /* Verde medio (Botones, menú lateral, iconos) */
-  --color-primary-alt: #2E9A7B;    /* Variante del verde principal */
-  --color-primary-light: #C5ECDD;  /* Verde menta claro (Fondos suaves, bordes, estados activos) */
-  --color-background: #FEFEFE;     /* Blanco roto (Fondo general de la app) */
-  --color-surface: #FFFFFF;        /* Blanco puro (Para tarjetas y contenedores) */
-  
-  /* Colores de Texto adicionales para contraste */
-  --color-text-main: #333333;
-  --color-text-muted: #6B7280;
-  
-  /* Tipografía */
-  --font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
-  
-  /* Radios de borde observados en el diseño */
-  --border-radius-sm: 4px;
-  --border-radius-md: 8px;     /* Para tarjetas y tablas */
-  --border-radius-pill: 50px;  /* Para botones redondeados y botones del menú */
-  
-  /* Sombras */
-  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  /* Paleta oficial (Adobe Color) */
+  --color-primary-dark: #1E4A3D;   /* header oscuro */
+  --color-primary: #2D9A7B;        /* sidebar, botones, textos de acento */
+  --color-primary-light: #C5ECDD;  /* hover, fondos activos */
+  --color-surface: #FEFEFE;        /* fondo general */
+
+  /* Complementarios que tu paleta no cubre pero la UI necesita */
+  --color-input-bg: #F5FBF9;       /* fondo de inputs (derivado, muy claro) */
+  --color-text: #1A1A1A;
+  --color-text-muted: #6B7A76;
+  --radius: 20px;
 }
 
 /* ==========================================================================

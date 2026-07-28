@@ -1,0 +1,37 @@
+/* public-footer.css */
+.public-footer {
+  background: var(--color-primary-dark);
+  color: white;
+  padding: 2.5rem 3rem 1rem;
+}
+
+.footer-contenido {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-marca .logo-text { font-size: 1.3rem; font-weight: 700; }
+.footer-marca p { color: rgba(255,255,255,0.7); margin-top: 0.5rem; max-width: 240px; font-size: 0.9rem; }
+
+.footer-columna { display: flex; flex-direction: column; gap: 0.6rem; }
+.footer-columna h4 { color: var(--color-primary-light); margin-bottom: 0.4rem; font-size: 0.95rem; }
+.footer-columna a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.9rem; }
+.footer-columna a:hover { color: white; }
+
+.footer-copy {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+}
+
+@media (max-width: 768px) {
+  .public-footer { padding: 2rem 1.5rem 1rem; }
+  .footer-contenido { flex-direction: column; gap: 1.5rem; }
+}

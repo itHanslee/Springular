@@ -1,0 +1,28 @@
+<!-- public-header.html -->
+<header class="public-header">
+  <a routerLink="/" class="logo" (click)="cerrarMenu()">
+    <img src="/delta.jpeg" alt="DELTA" />
+    <span class="logo-text">DELTA</span>
+  </a>
+
+  <nav class="nav-links" [class.abierto]="menuAbierto">
+    
+    <a routerLink="/" (click)="cerrarMenu()">Inicio</a>
+    <a routerLink="/esquema" (click)="cerrarMenu()">Esquema</a>
+    <a routerLink="/soporte" (click)="cerrarMenu()">Soporte</a>
+    <a routerLink="/nosotros" (click)="cerrarMenu()">Nosotros</a>
+  </nav>
+
+  <button
+    class="menu-toggle"
+    (click)="toggleMenu()"
+    [attr.aria-expanded]="menuAbierto"
+    aria-label="Abrir menú"
+  >
+    @if (!menuAbierto) {
+      <span>☰</span>
+    } @else {
+      <span>✕</span>
+    }
+  </button>
+</header>

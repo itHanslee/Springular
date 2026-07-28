@@ -1,0 +1,69 @@
+/* public-header.css */
+.public-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-primary-dark);
+  color: white;
+  padding: 1rem 3rem;
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  text-decoration: none;
+}
+
+.logo img {
+  width: 20px;
+  height: auto;
+  display: block;
+}
+
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { color: white; text-decoration: none; font-weight: 500; }
+.nav-links a:hover { opacity: 0.8; }
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* --- Responsive: hamburguesa activa debajo de 768px --- */
+@media (max-width: 768px) {
+  .public-header { padding: 1rem 1.5rem; }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--color-primary-dark);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    gap: 0;
+  }
+
+  .nav-links.abierto {
+    max-height: 300px;
+    padding: 1rem 1.5rem;
+  }
+
+  .nav-links a {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .menu-toggle { display: block; }
+}
