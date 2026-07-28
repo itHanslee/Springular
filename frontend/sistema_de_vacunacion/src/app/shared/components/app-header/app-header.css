@@ -8,6 +8,13 @@
   padding: 0.9rem 2rem;
 }
 .logo { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.2rem; }
+
+.logo img {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+}
+
 .usuario { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; }
 .avatar {
   width: 32px; height: 32px;

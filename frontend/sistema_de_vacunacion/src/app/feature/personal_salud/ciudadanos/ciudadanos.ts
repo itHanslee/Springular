@@ -3,6 +3,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CiudadanoService } from '../../../core/services/ciudadano';
 import { Ciudadano } from '../../../shared/models/ciudadano.model';
+import { calcularEdad } from '../../../shared/utils/fecha.utils';
 
 @Component({
   selector: 'app-ciudadanos',
@@ -17,12 +18,16 @@ export class Ciudadanos implements OnInit {
   terminoBusqueda = signal('');
   mostrarFormulario = signal(false);
 
+  opcionesTipoDocumento = ["CC","RC","TI","CE", "PA"];
+  opcionesGenero = ["Masculino", "Femenino", "Otro"];
+
   ciudadanosFiltrados = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase().trim();
     if (!termino) return this.ciudadanos();
     return this.ciudadanos().filter(c =>
-      c.documento.toLowerCase().includes(termino) ||
-      c.nombre.toLowerCase().includes(termino)
+      c.numeroDocumento.toLowerCase().includes(termino) ||
+      c.nombre.toLowerCase().includes(termino) ||
+      c.apellido.toLowerCase().includes(termino)
     );
   });
 
@@ -34,11 +39,18 @@ export class Ciudadanos implements OnInit {
     private ciudadanoService: CiudadanoService,
     private fb: FormBuilder
   ) {
-    // 👇 ahora se inicializa DENTRO del constructor, cuando this.fb ya existe
+    
     this.form = this.fb.group({
+      numeroDocumento: ['', Validators.required],
+      tipoDocumento: ['', Validators.required],
       nombre: ['', Validators.required],
-      documento: ['', Validators.required],
-      edad: [null as number | null, [Validators.required, Validators.min(0)]],
+      apellido: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      contrasena: ['', Validators.required, Validators.minLength(8)],
+      telefono: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required],
+      genero: ['', Validators.required],
+      direccion: ['', Validators.required]
     });
   }
 
@@ -52,6 +64,10 @@ export class Ciudadanos implements OnInit {
       this.ciudadanos.set(data);
       this.cargando.set(false);
     });
+  }
+
+  edadDe(fechaNacimiento: string): number {
+    return calcularEdad(fechaNacimiento);
   }
 
   buscar(valor: string): void {

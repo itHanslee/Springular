@@ -5,60 +5,86 @@
 
   <div class="toolbar">
     <div class="campo-busqueda">
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="7"/><path d="M21 21 L16.65 16.65"/>
-      </svg>
       <input
         type="text"
-        placeholder="Buscar por documento"
+        placeholder="Buscar por documento o nombre"
         (input)="buscar($any($event.target).value)"
       />
     </div>
-
     <button class="btn-primario" (click)="toggleFormulario()">
-      <span>{{ mostrarFormulario() ? '✕' : '+' }}</span> Registrar
+      {{ mostrarFormulario() ? '✕' : '+' }} Registrar
     </button>
   </div>
 
   @if (mostrarFormulario()) {
     <form [formGroup]="form" (ngSubmit)="registrar()" class="form-nuevo">
       <div class="campo">
-        <label>Nombre completo</label>
-        <input formControlName="nombre" placeholder="Ej. María Ortíz" />
-        @if (form.get('nombre')?.invalid && form.get('nombre')?.touched) {
-          <span class="error">Este campo es obligatorio</span>
-        }
+        <label>Tipo de documento</label>
+        <select formControlName="tipoDocumento">
+          @for (opcion of opcionesTipoDocumento; track opcion) {
+            <option [value]="opcion">{{ opcion }}</option>
+          }
+        </select>
       </div>
 
       <div class="campo">
-        <label>Documento</label>
-        <input formControlName="documento" placeholder="Ej. 1048XXXXXXX" />
-        @if (form.get('documento')?.invalid && form.get('documento')?.touched) {
-          <span class="error">Este campo es obligatorio</span>
-        }
+        <label>Número de documento</label>
+        <input formControlName="numeroDocumento" placeholder="Ej. 1048555222" />
       </div>
 
       <div class="campo">
-        <label>Edad</label>
-        <input formControlName="edad" type="number" placeholder="Ej. 18" />
-        @if (form.get('edad')?.invalid && form.get('edad')?.touched) {
-          <span class="error">Ingresa una edad válida</span>
-        }
+        <label>Nombre</label>
+        <input formControlName="nombre" placeholder="Ej. María" />
       </div>
 
-      <button type="submit" class="btn-guardar" [disabled]="form.invalid">
-        Guardar
-      </button>
+      <div class="campo">
+        <label>Apellido</label>
+        <input formControlName="apellido" placeholder="Ej. Ortíz" />
+      </div>
+
+      <div class="campo">
+        <label>Email</label>
+        <input formControlName="email" type="email" placeholder="Ej. maria@correo.com" />
+      </div>
+
+      <div class="campo">
+        <label>Contraseña</label>
+        <input formControlName="contrasena" type="password" placeholder="Mínimo 8 caracteres" />
+      </div>
+
+      <div class="campo">
+        <label>Teléfono</label>
+        <input formControlName="telefono" placeholder="Ej. 3001234567" />
+      </div>
+
+      <div class="campo">
+        <label>Fecha de nacimiento</label>
+        <input formControlName="fechaNacimiento" type="date" />
+      </div>
+
+      <div class="campo">
+        <label>Género</label>
+        <select formControlName="genero">
+          @for (opcion of opcionesGenero; track opcion) {
+            <option [value]="opcion">{{ opcion }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="campo campo-ancho">
+        <label>Dirección</label>
+        <input formControlName="direccion" placeholder="Ej. Calle 45 #12-30" />
+      </div>
+
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid">Guardar</button>
     </form>
   }
 
-  @if (cargando()) {
-    <p class="estado-carga">Cargando ciudadanos...</p>
-  } @else {
+  
     <table class="tabla">
       <thead>
         <tr>
-          <th>Nombre</th>
+          <th>Nombre completo</th>
           <th>Documento</th>
           <th>Edad</th>
           <th>Última vacuna aplicada</th>
@@ -67,9 +93,9 @@
       <tbody>
         @for (ciudadano of ciudadanosFiltrados(); track ciudadano.id) {
           <tr>
-            <td>{{ ciudadano.nombre }}</td>
-            <td>{{ ciudadano.documento }}</td>
-            <td>{{ ciudadano.edad }}</td>
+            <td>{{ ciudadano.nombre }} {{ ciudadano.apellido }}</td>
+            <td>{{ ciudadano.numeroDocumento }}</td>
+            <td>{{ edadDe(ciudadano.fechaNacimiento) }}</td>
             <td>{{ ciudadano.ultimaVacunaAplicada || '—' }}</td>
           </tr>
         }
@@ -79,5 +105,5 @@
     @if (!hayResultados()) {
       <p class="sin-resultados">No se encontraron ciudadanos con ese criterio.</p>
     }
-  }
+  
 </section>

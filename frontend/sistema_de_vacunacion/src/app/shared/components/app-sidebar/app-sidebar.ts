@@ -5,6 +5,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 export interface MenuItem {
   label: string;
   ruta: string;
+  icon: string;
 }
 
 @Component({

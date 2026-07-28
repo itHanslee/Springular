@@ -16,11 +16,11 @@ export class PersonalSaludLayout {
   nombreUsuario: string; 
 
   menuItems: MenuItem[] = [
-    { label: 'Ciudadanos', ruta: 'ciudadanos' },
-    { label: 'Registrar vacunación', ruta: 'registrar-vacunacion' },
-    { label: 'Inventario', ruta: 'inventario' },
-    { label: 'Reportes', ruta: 'reportes' },
-    { label: 'Historial clínico', ruta: 'historial-clinico' },
+    { label: 'Ciudadanos', ruta: 'ciudadanos', icon: 'bi bi-people' },
+    { label: 'Registrar vacunación', ruta: 'registrar-vacunacion', icon: 'bi bi-journal-medical' },
+    { label: 'Inventario', ruta: 'inventario', icon: 'bi bi-box-seam' },
+    { label: 'Reportes', ruta: 'reportes', icon: 'bi bi-bar-chart' },
+    { label: 'Historial clínico', ruta: 'historial-clinico', icon: 'bi bi-file-medical' },
   ];
 
   constructor(private authService: AuthService) {
