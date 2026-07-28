@@ -1,1 +1,40 @@
-<p>inventario works!</p>
+<section class="inventario">
+  <h1>Ciudadanos</h1>
+  <p class="subtitulo">Consulta de existencias</p>
+
+  <div class="toolbar">
+    <div class="campo-busqueda">
+     <input #inputBusqueda type="text" placeholder="Buscar nombre o lote de vacuna"
+    (input)="buscarVacunas($any($event.target).value)"/>
+    </div>
+    <button class="btn-primario" type="button" (click)="buscarVacunas(inputBusqueda.value)">
+     Buscar
+    </button>
+  </div>
+ 
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Lote</th>
+          <th>Stock</th>
+          <th>Vence</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (vacuna of vacunasFiltradas(); track vacuna.id) {
+          <tr>
+            <td>{{ vacuna.nombre }}</td>
+            <td>{{ vacuna.numeroLote }}</td>
+            <td>{{ vacuna.dosisTotales }}</td>
+            <td>{{ vacuna.fechaVencimiento | date }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (!hayResultados()) {
+      <p class="sin-resultados">No se encontraron vacunas con ese criterio.</p>
+    }
+  
+</section>

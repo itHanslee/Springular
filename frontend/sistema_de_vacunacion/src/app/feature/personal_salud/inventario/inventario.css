@@ -1,0 +1,96 @@
+.inventario {
+    background-color:var(--color-surface);
+    padding: 1.5rem 2rem;
+}
+
+.inventario h1{
+    color: var(--color-primary-dark);
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.toolbar {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.campo-busqueda {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-input-bg);
+    border: 1px solid var(--color-primary-light);
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    color: var(--color-text-muted)
+}
+
+.campo-busqueda input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.btn-primario {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 0.6rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-primario:hover {
+  background: var(--color-primary-light);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th {
+  color: var(--color-primary-dark);
+  text-align: left;
+  border-bottom: 2px solid var(--color-primary-light);
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.tabla td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--color-primary-light);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.sin-resultados {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 1.5rem 0;
+}
+
+@media (max-width: 700px) {
+  .inventario { padding: 1rem; }
+  .tabla { font-size: 0.85rem; }
+  .tabla th:nth-child(4), .tabla td:nth-child(4) { display: none; } /* oculta "última vacuna" en móvil */
+}
+
+
+
