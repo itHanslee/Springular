@@ -1,1 +1,9 @@
-<p>ciudadano-layout works!</p>
+<app-header [nombreUsuario]="nombreUsuario"></app-header>
+
+<div class="layout-body">
+  <app-sidebar [items]="menuItems"></app-sidebar>
+
+  <main class="contenido">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,0 +1,51 @@
+.vacunas-aplicadas {
+  background-color: var(--color-surface);
+  padding: 1.5rem 2rem;
+}
+
+.vacunas-aplicadas h1 {
+  color: var(--color-primary-dark);
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.tabla-contenedor {
+  width: 100%;
+  max-width: 980px;
+}
+
+.tabla-vacunas {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-vacunas th {
+  color: var(--color-primary-dark);
+  text-align: left;
+  border-bottom: 2px solid var(--color-primary-light);
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.tabla-vacunas td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--color-primary-light);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+@media (max-width: 700px) {
+  .vacunas-aplicadas {
+    padding: 1rem;
+  }
+
+  .tabla-vacunas {
+    font-size: 0.85rem;
+  }
+}

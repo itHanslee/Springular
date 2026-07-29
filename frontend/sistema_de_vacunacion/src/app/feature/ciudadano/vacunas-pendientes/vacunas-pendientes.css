@@ -1,0 +1,66 @@
+.vacunas-pendientes {
+  background-color: var(--color-surface);
+  padding: 1.5rem 2rem;
+}
+
+.vacunas-pendientes h1 {
+  color: var(--color-primary-dark);
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: var(--color-text-muted);
+  margin-bottom: 1.2rem;
+}
+
+.lista-pendientes {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.pendiente-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.95rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #9e9e9e;
+  background: #ffffff;
+  font-size: 1rem;
+}
+
+.pendiente-card--proxima {
+  background: #cfeee6;
+  border-color: transparent;
+}
+
+.vacuna {
+  color: var(--color-primary-dark);
+  font-weight: 600;
+}
+
+.estado {
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.estado-gris {
+  color: #6b6b6b;
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .vacunas-pendientes {
+    padding: 1rem;
+  }
+
+  .pendiente-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+}
