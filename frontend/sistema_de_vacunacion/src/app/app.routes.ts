@@ -58,7 +58,7 @@ export const routes: Routes = [
       { path: 'auditorias-globales', loadComponent: () =>
           import('./feature/administrador/auditorias-globales/auditorias-globales').then(m => m.AuditoriasGlobales) },
       { path: 'personal-salud', loadComponent: () =>
-          import('./feature/administrador/personal-salud/personal-salud').then(m => m.PersonalSalud) },
+          import('./feature/administrador/registrar-personal-salud/personal-salud').then(m => m.PersonalSalud) },
       { path: 'gestionar-vacunas', loadComponent: () =>
           import('./feature/administrador/gestionar-vacunas/gestionar-vacunas').then(m => m.GestionarVacunas) },
       { path: '', redirectTo: 'auditorias-globales', pathMatch: 'full' }

@@ -1,1 +1,52 @@
-<p>auditorias-globales works!</p>
+<!-- feature/administrador/auditorias-globales/auditorias-globales.html -->
+<section class="auditorias">
+  <h1>Auditorías globales</h1>
+  <p class="subtitulo">Consulta de acciones realizadas por todos los usuarios del sistema</p>
+
+  <div class="toolbar">
+    <div class="campo-busqueda">
+  <input
+    type="text"
+    placeholder="Buscar usuario"
+    (input)="buscar($any($event.target).value)"
+  />
+  <span ><i class="bi bi-search"></i></span>
+</div>
+
+    <select class="filtro-tipo" (change)="filtrarPorTipo($any($event.target).value)">
+      <option value="">Todas las acciones</option>
+      @for (opcion of opcionesTipoAuditoria; track opcion) {
+        <option [value]="opcion">{{ opcion }}</option>
+      }
+    </select>
+  </div>
+
+  @if (cargando()) {
+    <p class="estado-carga">Cargando auditorías...</p>
+  } @else {
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Acción</th>
+          <th>Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (auditoria of auditoriasFiltradas(); track auditoria.id) {
+          <tr>
+            <td>{{ formatearFecha(auditoria.fechaAuditoria) }}</td>
+            <td>{{ auditoria.usuario.nombre }} {{ auditoria.usuario.apellido }}</td>
+            <td>{{ auditoria.tipoAuditoria }}</td>
+            <td>{{ auditoria.descripcion }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (!hayResultados()) {
+      <p class="sin-resultados">No se encontraron registros de auditoría.</p>
+    }
+  }
+</section>

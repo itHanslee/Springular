@@ -11,7 +11,8 @@
   --color-primary-dark: #1E4A3D;   /* header oscuro */
   --color-primary: #2D9A7B;        /* sidebar, botones, textos de acento */
   --color-primary-light: #C5ECDD;  /* hover, fondos activos */
-  --color-surface: #FEFEFE;        /* fondo general */
+  --color-surface: #FEFEFE;
+  --color-secondary: #7ED9B6;     /* lineas para bordes */
 
   /* Complementarios que tu paleta no cubre pero la UI necesita */
   --color-input-bg: #F5FBF9;       /* fondo de inputs (derivado, muy claro) */

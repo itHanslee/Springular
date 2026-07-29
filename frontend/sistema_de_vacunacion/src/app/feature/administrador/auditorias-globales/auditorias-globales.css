@@ -1,0 +1,104 @@
+/* feature/administrador/auditorias-globales/auditorias-globales.css */
+.auditorias {
+  background: var(--color-surface);
+  padding: 1.5rem 2rem;
+}
+
+.auditorias h1 {
+  color: var(--color-primary-dark);
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.campo-busqueda {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  align-items: center;
+  background: var(--color-input-bg);
+  border: 2px solid var(--color-primary-light);
+  border-radius: 15px;
+  padding: 0.6rem 1.5rem 0.6rem 1.1rem;
+  color: var(--color-text-muted);
+}
+
+.campo-busqueda input {
+  border: none;
+  background: transparent;
+  outline: none;
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--color-secondary, #7ED9B6);
+}
+
+.campo-busqueda span i {
+  font-size: 1.3rem;
+  color: var(--color-secondary, #7ED9B6);
+}
+
+.filtro-tipo {
+  min-width: 180px;
+  padding: 0.6rem 1.1rem;
+  border: 1.5px solid var(--color-primary-light);
+  border-radius: 999px;
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.filtro-tipo:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.estado-carga {
+  color: var(--color-text-muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla th {
+  color: var(--color-primary-dark);
+  text-align: left;
+  border-bottom: 2px solid var(--color-primary-light);
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+}
+
+.tabla td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--color-primary-light);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.sin-resultados {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 1.5rem 0;
+}
+
+@media (max-width: 700px) {
+  .auditorias { padding: 1rem; }
+  .tabla { font-size: 0.85rem; }
+  .tabla th:nth-child(4), .tabla td:nth-child(4) { display: none; } /* oculta "descripción" en móvil */
+}
