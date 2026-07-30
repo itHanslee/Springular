@@ -57,9 +57,6 @@
 }
 .btn-consultar:hover { opacity: 0.9; }
 
-.bibi-search { 
-  font-size: 5 rem; 
-}
 
 .tarjeta-plataforma {
   background: var(--color-surface);
