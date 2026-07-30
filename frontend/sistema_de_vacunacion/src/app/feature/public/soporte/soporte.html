@@ -1,0 +1,126 @@
+<app-public-header></app-public-header>
+
+<main class="soporte-page">
+  <section class="hero-soporte">
+    <div class="hero-texto">
+      <span class="badge">SOPORTE</span>
+      <h1>¿Tenés dudas sobre la página?</h1>
+      <p class="descripcion">
+        Revisa las preguntas frecuentes, busca tu consulta y contactá a un asesor si no encontrás la respuesta.
+      </p>
+    </div>
+  </section>
+
+  <section class="panel card">
+    <div class="panel-header">
+      <div>
+        <h2>Preguntas frecuentes</h2>
+        <p>Usá este buscador para encontrar tu pregunta rápidamente.</p>
+      </div>
+      <div class="buscador-wrap">
+        <input
+          type="search"
+          class="form-control"
+          placeholder="Escribí tu pregunta..."
+          [value]="faqSearch()"
+          (input)="faqSearch.set($any($event.target).value)"
+        />
+      </div>
+    </div>
+
+    <div class="faq-list">
+      <article *ngFor="let faq of filteredFaqs(); index as i" class="faq-item">
+        <button
+          type="button"
+          class="faq-question"
+          (click)="toggleFaq(i)"
+          [attr.aria-expanded]="selectedQuestion() === i"
+        >
+          <span>{{ faq.question }}</span>
+          <span class="faq-icon">{{ selectedQuestion() === i ? '−' : '+' }}</span>
+        </button>
+
+        <div class="faq-answer" *ngIf="selectedQuestion() === i">
+          <p>{{ faq.answer }}</p>
+        </div>
+      </article>
+
+      <div *ngIf="filteredFaqs().length === 0" class="faq-empty">
+        No encontramos resultados para tu búsqueda.
+      </div>
+    </div>
+  </section>
+
+  <section class="panel card contacto-panel">
+    <div class="contacto-intro">
+      <span class="badge badge-secondary">No encontraste la respuesta?</span>
+      <h2>Contactá a un asesor</h2>
+      <p>
+        Si tu consulta no está en las preguntas frecuentes, escribinos aquí y un miembro del equipo te responderá.
+      </p>
+    </div>
+
+    <form class="contacto-form" (submit)="handleSubmit($event)" novalidate>
+      <div class="form-grid">
+        <label>
+          Nombre completo
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Tu nombre completo"
+            [value]="form().nombre"
+            (input)="updateField('nombre', $any($event.target).value)"
+          />
+        </label>
+
+        <label>
+          Correo electrónico
+          <input
+            class="form-control"
+            type="email"
+            placeholder="ejemplo@correo.com"
+            [value]="form().correo"
+            (input)="updateField('correo', $any($event.target).value)"
+          />
+        </label>
+      </div>
+
+      <label>
+        Asunto
+        <input
+          class="form-control"
+          type="text"
+          placeholder="De qué se trata tu consulta"
+          [value]="form().asunto"
+          (input)="updateField('asunto', $any($event.target).value)"
+        />
+      </label>
+
+      <label>
+        Mensaje
+        <textarea
+          class="form-control"
+          rows="5"
+          placeholder="Contanos tu consulta con todos los detalles"
+          [value]="form().mensaje"
+          (input)="updateField('mensaje', $any($event.target).value)"
+        ></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">Enviar consulta</button>
+        <div class="form-status" *ngIf="submitted()">
+          <span *ngIf="canSubmit(); else errorTpl">
+            Tu mensaje fue enviado correctamente. Pronto te contactará un asesor.
+          </span>
+          <ng-template #errorTpl>
+            Completa todos los campos para enviar la consulta.
+          </ng-template>
+        </div>
+      </div>
+    </form>
+  </section>
+</main>
+
+<app-public-footer></app-public-footer>
+

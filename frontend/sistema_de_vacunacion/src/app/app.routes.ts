@@ -64,6 +64,11 @@ export const routes: Routes = [
       { path: '', redirectTo: 'auditorias-globales', pathMatch: 'full' }
     ]
   },
+  {
+    path: 'soporte',
+    loadComponent: () =>
+      import('./feature/public/soporte/soporte').then(m => m.Soporte)
+  },
 
   { path: '**', redirectTo: '' }
 ];
