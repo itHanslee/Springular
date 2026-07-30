@@ -1,1 +1,43 @@
-<p>recordatorios works!</p>
+<section class="recordatorios">
+
+  <h1>Recordatorios</h1>
+
+  <p class="subtitulo">
+    Preferencias de notificación
+  </p>
+
+  <label class="preferencia">
+    <input
+      type="checkbox"
+      [checked]="mostrarEnSistema()"
+      (change)="cambiarPreferencia($any($event.target).checked)"
+    />
+
+    <span>Mostrar en el sistema</span>
+  </label>
+
+  <table class="tabla-recordatorios">
+
+    <thead>
+      <tr>
+        <th>Vacuna</th>
+        <th>Fecha Recordatorio</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (recordatorio of recordatoriosFiltrados(); track recordatorio.vacuna) {
+
+        <tr>
+          <td>{{ recordatorio.vacuna }}</td>
+          <td>{{ recordatorio.fecha }}</td>
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</section>

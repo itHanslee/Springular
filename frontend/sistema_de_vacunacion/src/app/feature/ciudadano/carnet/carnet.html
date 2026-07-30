@@ -1,1 +1,32 @@
-<p>carnet works!</p>
+<section class="carnet">
+
+  <h1>Mi carné</h1>
+
+  <p class="subtitulo">
+    Descarga del carné digital en PDF
+  </p>
+
+  @if (datosCarnet(); as datos) {
+
+    <div class="carnet-card">
+
+      <div class="avatar">
+        <i class="bi bi-person-circle"></i>
+      </div>
+
+      <div class="info">
+        <h2>{{ datos.nombre }}</h2>
+        <p>Documento {{ datos.documento }}</p>
+      </div>
+
+    </div>
+
+    <button class="btn-descargar" (click)="descargarCarnet()">
+      <i class="bi bi-download"></i>
+      Descargar
+    </button>
+
+  }
+
+</section>
+

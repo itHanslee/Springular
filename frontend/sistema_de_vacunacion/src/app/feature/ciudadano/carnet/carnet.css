@@ -1,0 +1,90 @@
+.carnet {
+  background-color: var(--color-surface);
+  padding: 1.5rem 2rem;
+}
+
+.carnet h1 {
+  color: var(--color-primary-dark);
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.carnet-card {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 18px;
+  border: 2px solid #b9b9b9;
+  background: #f5efef;
+  margin-bottom: 1.5rem;
+}
+
+.avatar i {
+  font-size: 6rem;
+  color: var(--color-primary);
+}
+
+.info h2 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.info p {
+  margin-top: 0.35rem;
+  font-size: 1.15rem;
+  color: var(--color-text);
+}
+
+.btn-descargar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.85rem 1.5rem;
+  border: 2px solid var(--color-primary);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--color-primary);
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-descargar i {
+  font-size: 1.8rem;
+}
+
+.btn-descargar:hover {
+  background: var(--color-primary-light);
+}
+
+@media (max-width: 700px) {
+  .carnet {
+    padding: 1rem;
+  }
+
+  .carnet-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .avatar i {
+    font-size: 5rem;
+  }
+
+  .btn-descargar {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

@@ -1,0 +1,63 @@
+.recordatorios {
+  background-color: var(--color-surface);
+  padding: 1.5rem 2rem;
+}
+
+.recordatorios h1 {
+  color: var(--color-primary-dark);
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitulo {
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.preferencia {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.preferencia input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.tabla-recordatorios {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-recordatorios th {
+  color: var(--color-primary-dark);
+  text-align: left;
+  border-bottom: 2px solid var(--color-primary-light);
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.tabla-recordatorios td {
+  padding: 0.65rem 0.5rem;
+  border-bottom: 1px solid var(--color-primary-light);
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+@media (max-width: 700px) {
+  .recordatorios {
+    padding: 1rem;
+  }
+
+  .tabla-recordatorios {
+    font-size: 0.85rem;
+  }
+}
