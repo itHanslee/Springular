@@ -37,7 +37,7 @@
   font-weight: 600;
 }
 
-/* --- Formulario --- */
+
 .form-reportes {
     padding: 1.5rem 0;
   display: flex;
@@ -79,12 +79,12 @@
   font-weight: 500;
 }
 
-/* Estado de error para los controles globales */
+
 .form-control.ng-invalid.ng-touched {
   border-color: #C0392B;
 }
 
-/* --- Botones de Exportación --- */
+
 .acciones-exportar {
   display: flex;
   gap: 1rem;

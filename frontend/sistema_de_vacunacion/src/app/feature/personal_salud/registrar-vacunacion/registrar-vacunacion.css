@@ -41,10 +41,6 @@
   color: var(--color-text-muted);
 }
 
-.campo-busqueda:focus-within {
-  border-color: var(--color-primary, #25966d);
-  box-shadow: 0 0 0 3px rgba(37, 150, 109, 0.15);
-}
 
 .campo-busqueda input {
   border: none;
