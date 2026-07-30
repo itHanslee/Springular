@@ -1,1 +1,68 @@
-<p>reportes works!</p>
+<!-- feature/personal_salud/reportes/reportes.html -->
+<section class="reportes-container">
+  <h1>Reportes</h1>
+  <p class="subtitle">Generación y exportación de reportes de vacunación</p>
+
+  @if (mensajeError()) {
+    <p class="mensaje-error">{{ mensajeError() }}</p>
+  }
+
+  @if (mensajeExito()) {
+    <p class="mensaje-exito">{{ mensajeExito() }}</p>
+  }
+
+  <form [formGroup]="form" class="form-reportes">
+    <div class="fila">
+      <div class="campo">
+        <label for="fechaDesde">Desde</label>
+        <input id="fechaDesde" type="date" class="form-control" formControlName="fechaDesde" />
+        @if (form.get('fechaDesde')?.invalid && form.get('fechaDesde')?.touched) {
+          <span class="error">Selecciona una fecha inicial</span>
+        }
+      </div>
+
+      <div class="campo">
+        <label for="fechaHasta">Hasta</label>
+        <input id="fechaHasta" type="date" class="form-control" formControlName="fechaHasta" />
+        @if (form.get('fechaHasta')?.invalid && form.get('fechaHasta')?.touched) {
+          <span class="error">Selecciona una fecha final</span>
+        }
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="tipoReporte">Tipo de reporte</label>
+      <select id="tipoReporte" class="form-control" formControlName="tipoReporte">
+        <option value="" disabled selected>Selecciona un tipo de reporte</option>
+        <option value="VACUNAS_APLICADAS">Vacunas Aplicadas</option>
+        <option value="INVENTARIO_LOTES">Estado de Inventario y Lotes</option>
+        <option value="COBERTURA_CIUDADANOS">Cobertura de Ciudadanos</option>
+      </select>
+      @if (form.get('tipoReporte')?.invalid && form.get('tipoReporte')?.touched) {
+        <span class="error">Selecciona un tipo de reporte</span>
+      }
+    </div>
+
+    <div class="acciones-exportar">
+      <button 
+        type="button" 
+        class="btn btn-outline" 
+        (click)="exportar('PDF')" 
+        [disabled]="form.invalid || exportandoPDF() || exportandoExcel()"
+      >
+        <i class="bi bi-file-earmark-pdf"></i>
+        <span>{{ exportandoPDF() ? 'Generando...' : 'Exportar PDF' }}</span>
+      </button>
+
+      <button 
+        type="button" 
+        class="btn btn-outline" 
+        (click)="exportar('EXCEL')" 
+        [disabled]="form.invalid || exportandoPDF() || exportandoExcel()"
+      >
+        <i class="bi bi-file-earmark-excel"></i>
+        <span>{{ exportandoExcel() ? 'Generando...' : 'Exportar Excel' }}</span>
+      </button>
+    </div>
+  </form>
+</section>

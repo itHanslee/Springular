@@ -33,11 +33,12 @@
   min-width: 220px;
   display: flex;
   align-items: center;
-  background: var(--color-input-bg, #f8fafc);
-  border: 1.5px solid var(--color-primary-light, #70ceae);
-  border-radius: var(--radius, 10px);
+  gap: 0.5rem;
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-primary-light);
+  border-radius: var(--radius);
   padding: 0.6rem 1rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  color: var(--color-text-muted);
 }
 
 .campo-busqueda:focus-within {

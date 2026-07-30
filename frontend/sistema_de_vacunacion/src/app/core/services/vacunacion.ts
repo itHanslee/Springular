@@ -6,6 +6,13 @@ import {
   Vacunacion as VacunacionModel
 } from '../../shared/models/vacunacion.model';
 
+export interface FiltrosReporte {
+  fechaDesde: string;
+  fechaHasta: string;
+  tipoReporte: string;
+  formato: 'PDF' | 'EXCEL';
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,5 +29,11 @@ export class VacunacionService {
 
   registrarAplicacion(datos: Partial<VacunacionModel>): Observable<VacunacionModel> {
     return this.http.post<VacunacionModel>(this.baseUrl, datos);
+  }
+
+  generarReporte(filtros: FiltrosReporte): Observable<Blob> {
+    return this.http.post(`${this.baseUrl}/reportes`, filtros, {
+      responseType: 'blob'
+    });
   }
 }

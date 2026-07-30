@@ -42,7 +42,7 @@ export const routes: Routes = [
       { path: 'inventario', loadComponent: () =>
           import('./feature/personal_salud/inventario/inventario').then(m => m.Inventario) },
       { path: 'reportes', loadComponent: () =>
-          import('./feature/personal_salud/reportes/reportes').then(m => m.Reportes) },
+          import('./feature/personal_salud/reportes/reportes').then(m => m.ReportesComponent) },
       { path: 'historial-clinico', loadComponent: () =>
           import('./feature/personal_salud/historial-clinico/historial-clinico').then(m => m.HistorialClinico) },
       { path: '', redirectTo: 'ciudadanos', pathMatch: 'full' }
