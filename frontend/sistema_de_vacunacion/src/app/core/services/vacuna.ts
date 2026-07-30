@@ -1,52 +1,27 @@
 // core/services/administrador/vacuna.ts
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Vacuna } from '../../../app/shared/models/vacuna.model';
 
 @Injectable({ providedIn: 'root' })
 export class VacunaService {
-  
-  // 1. Creamos nuestra base de datos simulada
-  private vacunasMock: Vacuna[] = [
-    { id: 1, nombre: 'Pfizer-BioNTech', dosis: 2, stock: 150 },
-    { id: 2, nombre: 'AstraZeneca', dosis: 2, stock: 80 },
-    { id: 3, nombre: 'Janssen', dosis: 1, stock: 45 },
-    { id: 4, nombre: 'Sinovac', dosis: 2, stock: 300 }
-  ];
+  private readonly baseUrl = '';
 
-  // Ya no necesitamos HttpClient temporalmente
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   listar(): Observable<Vacuna[]> {
-    // of() emite los datos y delay(800) simula el tiempo de carga de la red
-    return of(this.vacunasMock).pipe(delay(800));
+    return this.http.get<Vacuna[]>(this.baseUrl);
   }
-  
   listarVacunas(): Observable<Vacuna[]> {
-    return this.listar();
+    return this.http.get<Vacuna[]>(this.baseUrl);
   }
 
   registrar(vacuna: Partial<Vacuna>): Observable<Vacuna> {
-    // Simulamos la creación asignando un ID aleatorio
-    const nuevaVacuna: Vacuna = { 
-      ...vacuna, 
-      id: new Date().getTime() 
-    } as Vacuna;
-    
-    this.vacunasMock.push(nuevaVacuna);
-    return of(nuevaVacuna).pipe(delay(500));
+    return this.http.post<Vacuna>(this.baseUrl, vacuna);
   }
 
   actualizar(id: number, cambios: Partial<Vacuna>): Observable<Vacuna> {
-    const index = this.vacunasMock.findIndex(v => v.id === id);
-    
-    if (index !== -1) {
-      // Actualizamos el objeto en nuestro array falso
-      this.vacunasMock[index] = { ...this.vacunasMock[index], ...cambios };
-      return of(this.vacunasMock[index]).pipe(delay(500));
-    }
-    
-    throw new Error('Vacuna no encontrada');
+    return this.http.put<Vacuna>(`${this.baseUrl}/${id}`, cambios);
   }
 }
