@@ -8,7 +8,8 @@
    ========================================================================== */
 :root {
   /* Paleta oficial (Adobe Color) */
-  --color-primary-dark: #1E4A3D;   /* header oscuro */
+  --color-primary-dark: #1E4A3D;
+  --color-secondary-pure: #008000;   /* header oscuro */
   --color-primary: #2D9A7B;        /* sidebar, botones, textos de acento */
   --color-primary-light: #C5ECDD;  /* hover, fondos activos */
   --color-surface: #FEFEFE;
@@ -33,7 +34,7 @@
 html, body {
   height: 100%;
   width: 100%;
-  font-family: var(--font-family-base);
+  font-family: var(--font-family, 'Inter', sans-serif);
   background-color: var(--color-background);
   color: var(--color-text-main);
   -webkit-font-smoothing: antialiased;

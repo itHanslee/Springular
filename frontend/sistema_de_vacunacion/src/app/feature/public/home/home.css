@@ -30,7 +30,7 @@
 .badge {
   display: inline-block;
   background: var(--color-primary-light);
-  color: var(--color-primary-dark);
+  color: var(--color-secondary-pure);
   font-size: 0.75rem;
   font-weight: 700;
   padding: 0.35rem 0.9rem;
@@ -46,8 +46,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--color-primary-light);
-  color: var(--color-primary-dark);
+  background: var(--color-secondary);
+  color: var(--color-surface);
   border: none;
   border-radius: var(--radius);
   padding: 0.9rem 1.75rem;
@@ -56,6 +56,10 @@
   cursor: pointer;
 }
 .btn-consultar:hover { opacity: 0.9; }
+
+.bibi-search { 
+  font-size: 5 rem; 
+}
 
 .tarjeta-plataforma {
   background: var(--color-surface);

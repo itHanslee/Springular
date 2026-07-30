@@ -16,9 +16,9 @@ export class AdministradorLayout {
   nombreUsuario: string; 
 
   menuItems: MenuItem[] = [
-    { label: 'Auditorias globales', ruta: 'auditorias-globales', icon: 'bi bi-people' },
-    { label: 'Registrar vacuna', ruta: 'gestionar-vacunas', icon: 'bi bi-journal-medical' },
-    { label: 'Registrar vacunador', ruta: 'personal-salud', icon: 'bi bi-box-seam' },
+    { label: 'Auditorias globales', ruta: 'auditorias-globales', icon: 'bi bi-list-ul' },
+    { label: 'Gestionar vacunas', ruta: 'gestionar-vacunas', icon: 'bi bi-folder-plus' },
+    { label: 'Personal salud', ruta: 'personal-salud', icon: 'bi bi-people' }
   ];
 
   constructor(private authService: AuthService) {
