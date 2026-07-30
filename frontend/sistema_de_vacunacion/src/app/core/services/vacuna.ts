@@ -1,28 +1,52 @@
 // core/services/administrador/vacuna.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Vacuna } from '../../../app/shared/models/vacuna.model';
 
 @Injectable({ providedIn: 'root' })
 export class VacunaService {
-  private readonly baseUrl = '';
+  
+  // 1. Creamos nuestra base de datos simulada
+  private vacunasMock: Vacuna[] = [
+    { id: 1, nombre: 'Pfizer-BioNTech', dosis: 2, stock: 150 },
+    { id: 2, nombre: 'AstraZeneca', dosis: 2, stock: 80 },
+    { id: 3, nombre: 'Janssen', dosis: 1, stock: 45 },
+    { id: 4, nombre: 'Sinovac', dosis: 2, stock: 300 }
+  ];
 
-  constructor(private http: HttpClient) {}
+  // Ya no necesitamos HttpClient temporalmente
+  constructor() {}
 
   listar(): Observable<Vacuna[]> {
-    return this.http.get<Vacuna[]>(this.baseUrl);
+    // of() emite los datos y delay(800) simula el tiempo de carga de la red
+    return of(this.vacunasMock).pipe(delay(800));
   }
-
+  
   listarVacunas(): Observable<Vacuna[]> {
     return this.listar();
   }
 
   registrar(vacuna: Partial<Vacuna>): Observable<Vacuna> {
-    return this.http.post<Vacuna>(this.baseUrl, vacuna);
+    // Simulamos la creación asignando un ID aleatorio
+    const nuevaVacuna: Vacuna = { 
+      ...vacuna, 
+      id: new Date().getTime() 
+    } as Vacuna;
+    
+    this.vacunasMock.push(nuevaVacuna);
+    return of(nuevaVacuna).pipe(delay(500));
   }
 
   actualizar(id: number, cambios: Partial<Vacuna>): Observable<Vacuna> {
-    return this.http.put<Vacuna>(`${this.baseUrl}/${id}`, cambios);
+    const index = this.vacunasMock.findIndex(v => v.id === id);
+    
+    if (index !== -1) {
+      // Actualizamos el objeto en nuestro array falso
+      this.vacunasMock[index] = { ...this.vacunasMock[index], ...cambios };
+      return of(this.vacunasMock[index]).pipe(delay(500));
+    }
+    
+    throw new Error('Vacuna no encontrada');
   }
 }

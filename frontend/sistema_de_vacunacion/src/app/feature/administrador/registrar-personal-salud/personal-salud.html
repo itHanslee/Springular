@@ -1,1 +1,127 @@
-<p>personal-salud works!</p>
+<!-- feature/administrador/personal-salud/personal-salud.html -->
+<section class="personal-salud">
+  <h1>Personal de salud</h1>
+  <p class="subtitulo">Registro y gestión del personal de salud del sistema</p>
+
+  <div class="toolbar">
+    <div class="campo-busqueda">
+      <input
+        type="text"
+        placeholder="Buscar por nombre o documento"
+        (input)="buscar($any($event.target).value)"
+      />
+      <span class="icono-buscar"><i class="bi bi-search"></i></span>
+    </div>
+
+    <button class="btn-nueva" (click)="toggleFormulario()">
+      <span class="icono-mas">{{ mostrarFormulario() ? '✕' : '+' }}</span>
+      {{ personaEnEdicion() ? 'Editando' : 'Registrar' }}
+    </button>
+  </div>
+
+  @if (mostrarFormulario()) {
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-nuevo">
+      <div class="campo">
+        <label>Tipo de documento</label>
+        <select formControlName="tipoDocumento">
+          <option value="" disabled>Seleccione</option>
+          @for (opcion of opcionesTipoDocumento; track opcion) {
+            <option [value]="opcion">{{ opcion }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="campo">
+        <label>Número de documento</label>
+        <input formControlName="numeroDocumento" placeholder="Ej. 1032450001" />
+      </div>
+
+      <div class="campo">
+        <label>Nombre</label>
+        <input formControlName="nombre" placeholder="Ej. Ana" />
+      </div>
+
+      <div class="campo">
+        <label>Apellido</label>
+        <input formControlName="apellido" placeholder="Ej. Ríos" />
+      </div>
+
+      <div class="campo">
+        <label>Cargo</label>
+        <input formControlName="cargo" placeholder="Ej. Enfermera" />
+      </div>
+
+      <div class="campo">
+        <label>Email</label>
+        <input formControlName="email" type="email" placeholder="Ej. ana.rios@correo.com" />
+      </div>
+
+      <div class="campo">
+        <label>Teléfono</label>
+        <input formControlName="telefono" placeholder="Ej. 3001234567" />
+      </div>
+
+      <div class="campo">
+        <label>Fecha de nacimiento</label>
+        <input formControlName="fechaNacimiento" type="date" />
+      </div>
+
+      <div class="campo">
+        <label>Género</label>
+        <select formControlName="genero">
+          <option value="" disabled>Seleccione</option>
+          @for (opcion of opcionesGenero; track opcion) {
+            <option [value]="opcion">{{ opcion }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="campo campo-ancho">
+        <label>Dirección</label>
+        <input formControlName="direccion" placeholder="Ej. Calle 45 #12-30" />
+      </div>
+
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid">
+        {{ personaEnEdicion() ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </form>
+  }
+
+  @if (cargando()) {
+    <p class="estado-carga">Cargando personal de salud...</p>
+  } @else {
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Documento</th>
+          <th>Cargo</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (persona of personalFiltrado(); track persona.id) {
+          <tr>
+            <td>{{ persona.nombre }} {{ persona.apellido }}</td>
+            <td>{{ persona.tipoDocumento }} {{ persona.numeroDocumento }}</td>
+            <td>{{ persona.cargo }}</td>
+            <td>{{ persona.estado === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</td>
+            <td class="acciones">
+              <button class="btn-editar" (click)="editar(persona)" title="Editar">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="btn-eliminar" (click)="eliminar(persona)" title="Eliminar">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    @if (!hayResultados()) {
+      <p class="sin-resultados">No se encontró personal de salud con ese criterio.</p>
+    }
+  }
+</section>

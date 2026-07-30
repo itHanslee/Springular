@@ -1,4 +1,27 @@
-import { Service } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { PersonalSalud } from '../../shared/models/personal-salud.model';
 
-@Service()
-export class PersonalSalud {}
+@Injectable({ providedIn: 'root' })
+export class PersonalSaludService {
+  private readonly baseUrl = '';
+
+  constructor(private http: HttpClient) {}
+
+  listar(): Observable<PersonalSalud[]> {
+    return this.http.get<PersonalSalud[]>(this.baseUrl);
+  }
+
+  registrar(persona: Partial<PersonalSalud>): Observable<PersonalSalud> {
+    return this.http.post<PersonalSalud>(this.baseUrl, persona);
+  }
+
+  actualizar(id: number, cambios: Partial<PersonalSalud>): Observable<PersonalSalud> {
+    return this.http.put<PersonalSalud>(`${this.baseUrl}/${id}`, cambios);
+  }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+}
