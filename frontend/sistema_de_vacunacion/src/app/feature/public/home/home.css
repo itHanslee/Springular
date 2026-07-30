@@ -70,8 +70,8 @@
 
 .icono-escudo {
   width: 60px; height: 60px;
-  background: var(--color-primary);
-  color: white;
+  background: var(--color-primary-light);
+  color: var(--color-secondary-pure);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.5rem;
@@ -92,6 +92,11 @@ text-align: left;
   padding: 0.6rem 0;
   color: var(--color-text-muted);
   font-size: 0.95rem;
+}
+
+.lista-seguridad li i {
+  color: var(--color-secondary-pure);
+  font-size: 1.05rem;
 }
 
 .page-content {
