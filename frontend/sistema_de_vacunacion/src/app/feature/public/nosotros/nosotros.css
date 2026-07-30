@@ -1,0 +1,115 @@
+.nosotros-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  min-height: calc(100vh - 130px);
+  padding: 2.5rem 3rem 3rem;
+  background: linear-gradient(180deg, #F9FDFB 0%, #FFFFFF 100%);
+}
+
+.hero-nosotros {
+  padding: 2rem 0 1.5rem;
+}
+
+.hero-texto {
+  max-width: 780px;
+}
+
+.hero-texto .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-light);
+  color: var(--color-secondary-pure);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.hero-texto h1 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 1.05;
+  color: var(--color-primary-dark);
+  margin-bottom: 1rem;
+}
+
+.hero-texto .descripcion {
+  color: var(--color-text-muted);
+  max-width: 640px;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.panel {
+  padding: 1.8rem;
+  border: 1px solid rgba(46, 155, 124, 0.15);
+  border-radius: 22px;
+  box-shadow: 0 18px 48px rgba(26, 26, 26, 0.05);
+}
+
+.grid-dos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card h2 {
+  margin-bottom: 0.85rem;
+}
+
+.info-card p {
+  color: var(--color-text-muted);
+  line-height: 1.8;
+}
+
+.lista-puntos {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.lista-puntos li {
+  padding: 1rem 1rem 1rem 2.3rem;
+  border-radius: var(--radius);
+  background: #F8FFFB;
+  color: var(--color-text-muted);
+  position: relative;
+}
+
+.lista-puntos li::before {
+  content: '•';
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: var(--color-primary);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.panel-no-somos {
+  background: rgba(46, 155, 124, 0.06);
+  border-color: rgba(46, 155, 124, 0.22);
+}
+
+.lista-no-somos li {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 880px) {
+  .nosotros-page {
+    padding: 1.5rem 1.5rem 2rem;
+  }
+
+  .grid-dos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 1.4rem;
+  }
+}
