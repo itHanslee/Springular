@@ -1,13 +1,13 @@
+// vacuna.spec.ts
 import { TestBed } from '@angular/core/testing';
+import { VacunaService } from './vacuna';
 
-import { Vacuna } from './vacuna';
-
-describe('Vacuna', () => {
-  let service: Vacuna;
+describe('VacunaService', () => {
+  let service: VacunaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(Vacuna);
+    service = TestBed.inject(VacunaService);
   });
 
   it('should be created', () => {

@@ -1,1 +1,64 @@
-<p>registrar-vacunacion works!</p>
+<section class="registrar-vacunacion">
+  <h1>Registrar vacunación</h1>
+  <p class="subtitulo">Registro y consulta de información de ciudadanos</p>
+
+  <div class="toolbar">
+    <div class="campo-busqueda">
+      <input
+        type="text"
+        placeholder="Documento del ciudadano"
+        [value]="documentoBusqueda()"
+        (input)="onDocumentoChange($any($event.target).value)"
+        (keyup.enter)="buscar()"
+      />
+    </div>
+    <button class="btn-primario" type="button" (click)="buscar()" [disabled]="buscando()">
+      <i class="bi bi-search"></i> {{ buscando() ? 'Buscando...' : 'Buscar' }}
+    </button>
+  </div>
+
+  @if (mensajeError()) {
+    <p class="mensaje-error">{{ mensajeError() }}</p>
+  }
+
+  @if (mensajeExito()) {
+    <p class="mensaje-exito">{{ mensajeExito() }}</p>
+  }
+
+  @if (pendiente(); as p) {
+    <div class="resultado-ciudadano">
+      {{ p.nombreCiudadano }} · {{ p.documentoCiudadano }} · Pendiente: {{ p.descripcion }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="registrar()" class="form-vacunacion">
+      <div class="fila">
+        <div class="campo">
+          <label>Vacuna a aplicar</label>
+          <input [value]="p.vacunaNombre" readonly class="campo-solo-lectura" />
+        </div>
+        <div class="campo">
+          <label>Lote</label>
+          <input [value]="p.numeroLote" readonly class="campo-solo-lectura" />
+        </div>
+      </div>
+
+      <div class="fila">
+        <div class="campo">
+          <label>Dosis N°</label>
+          <input [value]="p.dosis" readonly class="campo-solo-lectura" />
+        </div>
+        <div class="campo">
+          <label>Fecha de aplicación</label>
+          <input formControlName="fechaAplicacion" type="date" />
+          @if (form.get('fechaAplicacion')?.invalid && form.get('fechaAplicacion')?.touched) {
+            <span class="error">Selecciona una fecha</span>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid || registrando()">
+        {{ registrando() ? 'Registrando...' : 'Registrar aplicación' }}
+      </button>
+    </form>
+  }
+</section>
