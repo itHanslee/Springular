@@ -16,7 +16,6 @@
 
 .lista-pendientes {
   width: 100%;
-  max-width: 760px;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
