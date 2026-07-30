@@ -10,10 +10,11 @@
   /* Paleta oficial (Adobe Color) */
   --color-primary-dark: #1E4A3D;
   --color-secondary-pure: #008000;   /* header oscuro */
-  --color-primary: #2D9A7B;        /* sidebar, botones, textos de acento */
+  --color-primary: #2E9B7C;        /* sidebar, botones, textos de acento */
   --color-primary-light: #C5ECDD;  /* hover, fondos activos */
   --color-surface: #FEFEFE;
-  --color-secondary: #7ED9B6;     /* lineas para bordes */
+  --color-secondary: #7ED9B6;
+      
 
   /* Complementarios que tu paleta no cubre pero la UI necesita */
   --color-input-bg: #F5FBF9;       /* fondo de inputs (derivado, muy claro) */
