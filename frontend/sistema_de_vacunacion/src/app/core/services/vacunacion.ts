@@ -7,8 +7,8 @@ import {
 } from '../../shared/models/vacunacion.model';
 
 export interface FiltrosReporte {
-  fechaDesde: string;
-  fechaHasta: string;
+  fechaDesde: Date;
+  fechaHasta: Date;
   tipoReporte: string;
   formato: 'PDF' | 'EXCEL';
 }
@@ -29,6 +29,12 @@ export class VacunacionService {
 
   registrarAplicacion(datos: Partial<VacunacionModel>): Observable<VacunacionModel> {
     return this.http.post<VacunacionModel>(this.baseUrl, datos);
+  }
+
+  obtenerHistorial(documento: string): Observable<VacunacionModel[]> {
+    return this.http.get<VacunacionModel[]>(
+      `${this.baseUrl}/historial/${encodeURIComponent(documento)}`
+    );
   }
 
   generarReporte(filtros: FiltrosReporte): Observable<Blob> {

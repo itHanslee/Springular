@@ -1,1 +1,39 @@
-<p>historial-clinico works!</p>
+<section class="historial-container">  
+    <h1>Historial Clínico</h1>
+    <p class="subtitle">Consulta cronológica por ciudadanos</p>    
+
+    @if(mensajeError()){
+        <p class="mensaje-error">{{ mensajeError() }}</p>
+    }
+
+    <form [formGroup]="form" class="form-busqueda" (ngSubmit)="buscar()">
+    <div class="campo-busqueda">
+      <input
+        id="documento"
+        type="text"
+        class="form-control"
+        placeholder="Buscar por documento"
+        formControlName="documento"
+      />
+      @if (form.get('documento')?.invalid && form.get('documento')?.touched) {
+        <span class="error">Ingresa un número de documento</span>
+      }
+    </div>
+ 
+    <button type="submit" class="btn-primario" [disabled]="buscando()">
+      <i class="bi bi-search"></i>
+      <span>{{ buscando() ? 'Buscando...' : 'Buscar' }}</span>
+    </button>
+  </form>
+
+    @if (historial().length > 0) {
+    <ul class="lista-historial">
+      @for (item of historial(); track item.id) {
+        <li class="resultado-item">
+          <span class="fecha">{{ item.fechaAplicacion | date:'dd/MM/yyyy' }} —</span>
+          <span class="detalle">{{ item.vacunaNombre }}, {{ item.dosis }}, aplicado por {{ item.aplicadoPor }}</span>
+        </li>
+      }
+    </ul>
+  }
+</section>

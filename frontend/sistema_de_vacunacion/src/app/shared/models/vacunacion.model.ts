@@ -17,4 +17,5 @@ export interface Vacunacion {
   fechaAplicacion: Date;
   dosis: NDosis;
   ciudadanoDocumento: string;
+  aplicadoPor: string;
 }
