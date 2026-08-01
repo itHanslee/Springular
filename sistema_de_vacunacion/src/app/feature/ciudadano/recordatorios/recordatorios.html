@@ -4,44 +4,58 @@
   <p class="subtitulo">Preferencias de notificación</p>
 
   @if (cargando()) {
-
     <p class="estado-carga">Cargando recordatorios...</p>
-
   } @else {
-<p class="subtitulo">Preferencias de notificación</p>
 
-<label class="preferencia">
-  <input
-    type="checkbox"
-    [checked]="mostrarEnSistema()"
-    (change)="cambiarPreferencia($any($event.target).checked)"
-  />
+    <label class="preferencia">
+      <input
+        type="checkbox"
+        [checked]="mostrarEnSistema()"
+        (change)="cambiarPreferencia($any($event.target).checked)"
+      />
+      <span>Mostrar en el sistema</span>
+    </label>
 
-  <span>Mostrar en el sistema</span>
-</label>
-    <table class="tabla-recordatorios">
+    @if (mostrarEnSistema()) {
 
-      <thead>
-        <tr>
-          <th>Vacuna</th>
-          <th>Fecha Recordatorio</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        @for (recordatorio of recordatoriosFiltrados(); track recordatorio.fechaProgramada) {
-
-          <tr>
-            <td>{{ recordatorio.mensaje }}</td>
-            <td>{{ recordatorio.fechaProgramada }}</td>
-          </tr>
-
+      <!-- Buscador -->
+      <div class="buscador">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Buscar por vacuna..."
+          [value]="terminoBusqueda()"
+          (input)="buscar($any($event.target).value)"
+        />
+        @if (terminoBusqueda()) {
+          <button class="limpiar" (click)="buscar('')">
+            <i class="bi bi-x-lg"></i>
+          </button>
         }
+      </div>
 
-      </tbody>
+      @if (hayResultados()) {
+        <table class="tabla-recordatorios">
+          <thead>
+            <tr>
+              <th>Vacuna</th>
+              <th>Fecha Recordatorio</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (r of recordatoriosFiltrados(); track r.id) {
+              <tr>
+                <td>{{ r.mensaje }}</td>
+                <td>{{ formatearFecha(r.fechaProgramada) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <p class="sin-resultados">No se encontraron recordatorios.</p>
+      }
 
-    </table>
+    }
 
   }
 

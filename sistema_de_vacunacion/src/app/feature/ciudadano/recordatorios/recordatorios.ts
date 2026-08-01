@@ -1,33 +1,41 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
-
-interface RecordatorioView {
-  mensaje: string;
-  fechaProgramada: string;
-  estado: 'Pendiente' | 'Enviado' | 'Visto';
-}
+import { CommonModule } from '@angular/common';
+import { RecordatorioService } from '../../../core/services/recordatorios';
+import { Recordatorio } from '../../../shared/models/recordatorios.model';
 
 @Component({
   selector: 'app-recordatorios',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './recordatorios.html',
-  styleUrl: './recordatorios.css'
+  styleUrls: ['./recordatorios.css']
 })
 export class Recordatorios implements OnInit {
+  recordatorios = signal<Recordatorio[]>([]);
+  cargando = signal(true);
+  terminoBusqueda = signal('');
+  mostrarEnSistema = signal(true);
 
-  mostrarEnSistema = signal(false);
+  recordatoriosFiltrados = computed(() => {
+    const termino = this.terminoBusqueda().toLowerCase().trim();
+    let resultado = this.recordatorios();
 
-  recordatorios = signal<RecordatorioView[]>([]);
+    if (!this.mostrarEnSistema()) {
+      return [];
+    }
 
-  cargando = signal(false);
+    if (termino) {
+      resultado = resultado.filter(r =>
+        r.mensaje.toLowerCase().includes(termino)
+      );
+    }
 
-  recordatoriosFiltrados = computed(() =>
-    this.recordatorios()
-  );
+    return resultado;
+  });
 
-  hayResultados = computed(() =>
-    this.recordatoriosFiltrados().length > 0
-  );
+  hayResultados = computed(() => this.recordatoriosFiltrados().length > 0);
+
+  constructor(private recordatorioService: RecordatorioService) {}
 
   ngOnInit(): void {
     this.cargarRecordatorios();
@@ -36,28 +44,41 @@ export class Recordatorios implements OnInit {
   cargarRecordatorios(): void {
     this.cargando.set(true);
 
-    this.recordatorios.set([
-      {
-        mensaje: 'COVID-19 (refuerzo)',
-        fechaProgramada: '12/05/26',
-        estado: 'Pendiente'
-      },
-      {
-        mensaje: 'Influenza',
-        fechaProgramada: '20/01/25',
-        estado: 'Enviado'
-      },
-      {
-        mensaje: 'Triple viral',
-        fechaProgramada: '03/06/20',
-        estado: 'Visto'
-      }
-    ]);
+    setTimeout(() => {
+      this.recordatorios.set([
+        {
+          id: 1,
+          fechaProgramada: new Date('2026-05-12'),
+          mensaje: 'COVID-19 (refuerzo)'
+        },
+        {
+          id: 2,
+          fechaProgramada: new Date('2025-01-20'),
+          mensaje: 'Influenza'
+        },
+        {
+          id: 3,
+          fechaProgramada: new Date('2020-06-03'),
+          mensaje: 'Triple viral'
+        }
+      ]);
+      this.cargando.set(false);
+    }, 400);
+  }
 
-    this.cargando.set(false);
+  buscar(valor: string): void {
+    this.terminoBusqueda.set(valor);
   }
 
   cambiarPreferencia(valor: boolean): void {
     this.mostrarEnSistema.set(valor);
+  }
+
+  formatearFecha(fecha: Date): string {
+    return fecha.toLocaleDateString('es-CO', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
   }
 }
