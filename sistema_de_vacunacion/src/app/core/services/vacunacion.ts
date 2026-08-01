@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import {
   VacunaPendiente,
   Vacunacion as VacunacionModel
@@ -27,7 +28,9 @@ export class VacunacionService {
     );
   }
 
-  registrarAplicacion(datos: Partial<VacunacionModel>): Observable<VacunacionModel> {
+  registrarAplicacion(
+    datos: Partial<VacunacionModel>
+  ): Observable<VacunacionModel> {
     return this.http.post<VacunacionModel>(this.baseUrl, datos);
   }
 
