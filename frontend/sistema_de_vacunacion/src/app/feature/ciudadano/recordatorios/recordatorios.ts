@@ -1,8 +1,9 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 
-interface Recordatorio {
-  vacuna: string;
-  fecha: string;
+interface RecordatorioView {
+  mensaje: string;
+  fechaProgramada: string;
+  estado: 'Pendiente' | 'Enviado' | 'Visto';
 }
 
 @Component({
@@ -10,13 +11,13 @@ interface Recordatorio {
   standalone: true,
   imports: [],
   templateUrl: './recordatorios.html',
-  styleUrl: './recordatorios.css',
+  styleUrl: './recordatorios.css'
 })
 export class Recordatorios implements OnInit {
 
   mostrarEnSistema = signal(false);
 
-  recordatorios = signal<Recordatorio[]>([]);
+  recordatorios = signal<RecordatorioView[]>([]);
 
   cargando = signal(false);
 
@@ -37,16 +38,19 @@ export class Recordatorios implements OnInit {
 
     this.recordatorios.set([
       {
-        vacuna: 'COVID-19 (refuerzo)',
-        fecha: '12/05/26'
+        mensaje: 'COVID-19 (refuerzo)',
+        fechaProgramada: '12/05/26',
+        estado: 'Pendiente'
       },
       {
-        vacuna: 'Influenza',
-        fecha: '20/01/25'
+        mensaje: 'Influenza',
+        fechaProgramada: '20/01/25',
+        estado: 'Enviado'
       },
       {
-        vacuna: 'Triple viral',
-        fecha: '03/06/20'
+        mensaje: 'Triple viral',
+        fechaProgramada: '03/06/20',
+        estado: 'Visto'
       }
     ]);
 

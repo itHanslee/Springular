@@ -1,12 +1,9 @@
 <section class="carnet">
 
-  <h1>Mi carné</h1>
+  <h1>Mi carnet</h1>
+  <p class="subtitulo">Descarga del carnet digital en PDF</p>
 
-  <p class="subtitulo">
-    Descarga del carné digital en PDF
-  </p>
-
-  @if (datosCarnet(); as datos) {
+  @if (ciudadano(); as datos) {
 
     <div class="carnet-card">
 
@@ -15,13 +12,18 @@
       </div>
 
       <div class="info">
-        <h2>{{ datos.nombre }}</h2>
-        <p>Documento {{ datos.documento }}</p>
+
+        <h2>{{ datos.nombre }} {{ datos.apellido }}</h2>
+
+        <p>
+          Documento {{ datos.numeroDocumento }}
+        </p>
+
       </div>
 
     </div>
 
-    <button class="btn-descargar" (click)="descargarCarnet()">
+    <button class="btn-descargar">
       <i class="bi bi-download"></i>
       Descargar
     </button>
@@ -29,4 +31,3 @@
   }
 
 </section>
-

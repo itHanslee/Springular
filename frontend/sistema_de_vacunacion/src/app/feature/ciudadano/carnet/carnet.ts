@@ -1,20 +1,16 @@
 import { Component, OnInit, signal } from '@angular/core';
-
-interface DatosCarnet {
-  nombre: string;
-  documento: string;
-}
+import { Ciudadano } from '../../../shared/models/ciudadano.model';
 
 @Component({
   selector: 'app-carnet',
   standalone: true,
   imports: [],
   templateUrl: './carnet.html',
-  styleUrl: './carnet.css',
+  styleUrl: './carnet.css'
 })
 export class Carnet implements OnInit {
 
-  datosCarnet = signal<DatosCarnet | null>(null);
+  ciudadano = signal<Ciudadano | null>(null);
 
   cargando = signal(false);
 
@@ -25,16 +21,22 @@ export class Carnet implements OnInit {
   cargarCarnet(): void {
     this.cargando.set(true);
 
-    this.datosCarnet.set({
-      nombre: 'María Ortiz',
-      documento: '1048XXXXXX'
+    // Mock temporal para mantener la estructura visual
+    this.ciudadano.set({
+      id: 1,
+      nombre: 'María',
+      apellido: 'Ortíz',
+      numeroDocumento: '1048XXXXXX',
+      tipoDocumento: 'CC',
+      email: 'maria@example.com',
+      contrasena: '',
+      telefono: '3001234567',
+      estado: 'ACTIVO',
+      fechaNacimiento: '2000-01-01',
+      genero: 'FEMENINO',
+      direccion: 'Barranquilla'
     });
 
     this.cargando.set(false);
   }
-
-  descargarCarnet(): void {
-    console.log('Descargar PDF');
-  }
 }
-

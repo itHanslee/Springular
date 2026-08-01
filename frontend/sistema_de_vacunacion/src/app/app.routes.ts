@@ -76,6 +76,11 @@ export const routes: Routes = [
       import('./feature/public/nosotros/nosotros').then(m => m.Nosotros)
   },
 
+{
+  path: 'esquema',
+  loadComponent: () =>
+    import('./feature/public/esquema/esquema').then(m => m.Esquema)
+},
 
 
 
@@ -85,3 +90,4 @@ export const routes: Routes = [
 
   { path: '**', redirectTo: '' }
 ];
+

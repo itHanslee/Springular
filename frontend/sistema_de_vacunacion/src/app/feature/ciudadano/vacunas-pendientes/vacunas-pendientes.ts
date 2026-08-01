@@ -1,10 +1,5 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
-
-interface VacunaPendiente {
-  vacuna: string;
-  estado: string;
-  proxima: boolean;
-}
+import { VacunaPendiente } from '../../../shared/models/vacunacion.model';
 
 @Component({
   selector: 'app-vacunas-pendientes',
@@ -24,11 +19,10 @@ export class VacunasPendientes implements OnInit {
   vacunasFiltradas = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase().trim();
 
-    if (!termino) return this.vacunasPendientes();
-
     return this.vacunasPendientes().filter(v =>
-      v.vacuna.toLowerCase().includes(termino) ||
-      v.estado.toLowerCase().includes(termino)
+      !termino ||
+      v.vacunaNombre.toLowerCase().includes(termino) ||
+      v.descripcion.toLowerCase().includes(termino)
     );
   });
 
@@ -43,18 +37,8 @@ export class VacunasPendientes implements OnInit {
   cargarVacunasPendientes(): void {
     this.cargando.set(true);
 
-    this.vacunasPendientes.set([
-      {
-        vacuna: 'Refuerzo influenza',
-        estado: 'Próxima',
-        proxima: true
-      },
-      {
-        vacuna: 'Refuerzo Tétanos',
-        estado: 'En 4 meses',
-        proxima: false
-      }
-    ]);
+    // TODO: conectar con backend cuando esté disponible
+    this.vacunasPendientes.set([]);
 
     this.cargando.set(false);
   }

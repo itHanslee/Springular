@@ -1,0 +1,226 @@
+.esquema-page {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 2rem 2rem 3rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #1a2e29;
+  background: #f6f8f7;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.hero h1 {
+  font-size: 2.3rem;
+  color: #0f4d3c;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+.hero p {
+  color: #4a6b62;
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ───────── Contenedor de tablas ───────── */
+.grupos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ───────── Tarjeta / Panel ───────── */
+.tabla-seccion {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 1.75rem;
+  box-shadow: 0 6px 18px rgba(15, 77, 60, 0.08);
+  border: 1px solid #e1ece8;
+}
+
+.tabla-seccion h2 {
+  color: #0f4d3c;
+  margin-bottom: 1.25rem;
+  font-size: 1.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.tabla-seccion h2 i {
+  color: #1f7a63;
+  font-size: 1.45rem;
+}
+
+/* ───────── Tabla ───────── */
+.tabla-esquema {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.96rem;
+}
+
+.tabla-esquema thead th {
+  background: #1f7a63;
+  color: #ffffff;
+  text-align: left;
+  padding: 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.tabla-esquema thead th:first-child {
+  border-top-left-radius: 12px;
+}
+
+.tabla-esquema thead th:last-child {
+  border-top-right-radius: 12px;
+}
+
+/* Proporciones para ocupar mejor el ancho */
+.tabla-esquema th:nth-child(1),
+.tabla-esquema td:nth-child(1) {
+  width: 28%;
+}
+
+.tabla-esquema th:nth-child(2),
+.tabla-esquema td:nth-child(2) {
+  width: 18%;
+}
+
+.tabla-esquema th:nth-child(3),
+.tabla-esquema td:nth-child(3) {
+  width: 54%;
+}
+
+.tabla-esquema td {
+  padding: 1rem;
+  border-bottom: 1px solid #e3eeea;
+  vertical-align: top;
+  line-height: 1.55;
+  color: #233a34;
+}
+
+.tabla-esquema tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-esquema tbody tr:hover {
+  background: #f7fbf9;
+}
+
+.tabla-esquema td:first-child {
+  font-weight: 600;
+  color: #0f4d3c;
+}
+
+.tabla-esquema td:nth-child(2) {
+  color: #0b6b5a;
+  font-weight: 600;
+}
+
+/* ───────── Nota de grupo ───────── */
+.nota {
+  margin-top: 1.1rem;
+  padding: 1rem 1.1rem;
+  background: #fff8ea;
+  border-left: 4px solid #f59e0b;
+  border-radius: 12px;
+  color: #7a5a00;
+  font-size: 0.94rem;
+  line-height: 1.6;
+}
+
+.notas-importantes {
+  margin-top: 2.5rem;
+  background: #eef7f4;
+  border: 1px solid #cfe7e0;
+  border-radius: 20px;
+  padding: 1.8rem 2rem;
+  color: #0b4f4a;
+}
+
+.notas-importantes h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.notas-importantes h3 i {
+  color: #e67e22;
+}
+
+.notas-importantes ul {
+  margin: 0 0 1.2rem 1.2rem;
+  padding: 0;
+}
+
+.notas-importantes li {
+  margin-bottom: 0.85rem;
+  line-height: 1.65;
+  color: #21423c;
+}
+
+.nota-final {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #cfe7e0;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* ───────── Responsive ───────── */
+@media (max-width: 900px) {
+  .esquema-page {
+    padding: 1.5rem 1rem 2.5rem;
+  }
+
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .tabla-seccion {
+    padding: 1rem;
+  }
+
+  .tabla-esquema {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .tabla-esquema th,
+  .tabla-esquema td {
+    white-space: normal;
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero h1 {
+    font-size: 1.55rem;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  .tabla-seccion h2 {
+    font-size: 1.2rem;
+  }
+
+  .notas-importantes {
+    padding: 1.2rem;
+  }
+}

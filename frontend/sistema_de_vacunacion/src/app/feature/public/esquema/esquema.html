@@ -1,0 +1,77 @@
+<app-public-header></app-public-header>
+
+<section class="esquema-page">
+
+  <div class="hero">
+    <h1>Esquema Nacional de Vacunación</h1>
+    <p>
+      Conoce las vacunas obligatorias y gratuitas disponibles para cada grupo de edad.
+    </p>
+  </div>
+
+
+  <!-- Grupos de edad -->
+  <div class="grupos-container">
+
+    <div
+      class="tabla-seccion"
+      *ngFor="let grupo of filteredGroups(); let i = index"
+    >
+      <h2>
+        <i [class]="'bi ' + grupo.icono"></i>
+        {{ grupo.titulo }}
+      </h2>
+
+      <table class="tabla-esquema">
+        <thead>
+          <tr>
+            <th>Vacuna</th>
+            <th>Dosis</th>
+            <th>Enfermedad que previene</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let vacuna of grupo.vacunas">
+            <td>{{ vacuna.nombre }}</td>
+            <td>{{ vacuna.dosis }}</td>
+            <td>{{ vacuna.enfermedad }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Nota del grupo (si existe) -->
+      <div class="nota" *ngIf="grupo.nota">
+        <strong>Nota:</strong> {{ grupo.nota }}
+      </div>
+    </div>
+
+    <!-- Sin resultados -->
+    <div class="no-results" *ngIf="filteredGroups().length === 0">
+      <i class="bi bi-inbox"></i>
+      <p>No se encontraron resultados para "{{ searchTerm() }}".</p>
+    </div>
+
+  </div>
+
+
+<!-- Información importante unificada -->
+<div class="notas-importantes">
+  <h3>
+    <i class="bi bi-info-circle-fill"></i>
+    Información importante
+  </h3>
+
+  <ul>
+    <li *ngFor="let nota of notasImportantes">{{ nota }}</li>
+  </ul>
+
+  <p class="nota-final">
+    Las vacunas del esquema nacional son gratuitas en todos los centros de salud públicos.
+    Acude al centro de salud más cercano para completar tu esquema de vacunación y mantener
+    actualizada tu protección.
+  </p>
+</div>
+
+</section>
+
+<app-public-footer></app-public-footer>
