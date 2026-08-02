@@ -1,4 +1,15 @@
-import { Service } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Auditoria } from '../../../app/shared/models/auditoria.model';
 
-@Service()
-export class Auditoria {}
+@Injectable({ providedIn: 'root' })
+export class AuditoriaService {
+  private readonly baseUrl = '/api/auditorias';
+
+  constructor(private http: HttpClient) {}
+
+  listar(): Observable<Auditoria[]> {
+    return this.http.get<Auditoria[]>(this.baseUrl);
+  }
+}
