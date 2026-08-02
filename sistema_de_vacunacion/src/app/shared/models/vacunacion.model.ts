@@ -1,13 +1,12 @@
-export type NDosis = "Primera" | "Segunda" | "Tercera" | "Refuerzo" | "Refuerzo 2" | "Unica";
+import { NumeroDosis } from './numero-dosis.model';
 
 export interface VacunaPendiente {
     nombreCiudadano: string;
     documentoCiudadano: string;
     vacunaNombre: string;
     numeroLote: string;
-    dosis: NDosis;
+    dosis: NumeroDosis;
     descripcion: string;
-
 }
 
 export interface Vacunacion {
@@ -15,7 +14,7 @@ export interface Vacunacion {
   vacunaNombre: string;
   numeroLote: string;
   fechaAplicacion: Date;
-  dosis: NDosis;
+  dosis: NumeroDosis;
   ciudadanoDocumento: string;
   aplicadoPor: string;
 }

@@ -84,10 +84,16 @@ export const routes: Routes = [
 
 
 
-
-
-
-
-  { path: '**', redirectTo: '' }
+{
+  path: 'login-ciudadano',
+  loadComponent: () => import('./feature/auth/login-ciudadano/login-ciudadano').then(m => m.LoginCiudadanoComponent)
+},
+{
+  path: 'login-staff',
+  loadComponent: () => import('./feature/auth/login-staff/login-staff').then(m => m.LoginStaffComponent)
+},
+{
+  path: '**', redirectTo: '' 
+}
 ];
 

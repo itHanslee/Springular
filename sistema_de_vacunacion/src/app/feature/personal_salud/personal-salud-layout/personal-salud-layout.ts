@@ -24,7 +24,7 @@ export class PersonalSaludLayout {
   ];
 
   constructor(private authService: AuthService) {
-    // 👇 se asigna DENTRO del constructor, cuando authService ya existe
-    this.nombreUsuario = this.authService.usuarioActual().nombre;
+    
+    this.nombreUsuario = this.authService.usuarioActual()?.nombre ?? '';
   }
 }
