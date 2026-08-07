@@ -11,74 +11,76 @@ import { Recordatorio } from '../../../shared/models/recordatorios.model';
   styleUrls: ['./recordatorios.css']
 })
 export class Recordatorios implements OnInit {
-  recordatorios = signal<Recordatorio[]>([]);
-  cargando = signal(true);
-  terminoBusqueda = signal('');
-  mostrarEnSistema = signal(true);
+  recordatorios = signal<Recordatorio[]>([])
+  cargando = signal(true)
+  terminoBusqueda = signal('')
+  mostrarEnSistema = signal(true)
 
   recordatoriosFiltrados = computed(() => {
-    const termino = this.terminoBusqueda().toLowerCase().trim();
-    let resultado = this.recordatorios();
+    const termino = this.terminoBusqueda().toLowerCase().trim()
+    let resultado = this.recordatorios()
 
     if (!this.mostrarEnSistema()) {
-      return [];
+      return []
     }
 
     if (termino) {
       resultado = resultado.filter(r =>
         r.mensaje.toLowerCase().includes(termino)
-      );
+      )
     }
 
-    return resultado;
-  });
+    return resultado
+  })
 
-  hayResultados = computed(() => this.recordatoriosFiltrados().length > 0);
+  hayResultados = computed(() => this.recordatoriosFiltrados().length > 0)
 
   constructor(private recordatorioService: RecordatorioService) {}
 
   ngOnInit(): void {
-    this.cargarRecordatorios();
+    this.cargarRecordatorios()
   }
 
-  cargarRecordatorios(): void {
-    this.cargando.set(true);
+cargarRecordatorios(): void {
+  this.cargando.set(true);
 
-    setTimeout(() => {
-      this.recordatorios.set([
-        {
-          id: 1,
-          fechaProgramada: new Date('2026-05-12'),
-          mensaje: 'COVID-19 (refuerzo)'
-        },
-        {
-          id: 2,
-          fechaProgramada: new Date('2025-01-20'),
-          mensaje: 'Influenza'
-        },
-        {
-          id: 3,
-          fechaProgramada: new Date('2020-06-03'),
-          mensaje: 'Triple viral'
-        }
-      ]);
+  this.recordatorioService.listarTodos().subscribe({
+    next: (data: Recordatorio[]) => {
+      console.log('🔥 DATOS DEL BACKEND =>', data);
+
+      const convertidos = data.map(r => ({
+        ...r,
+        fechaProgramada: new Date(r.fechaProgramada),
+        fechaEnvio: r.fechaEnvio ? new Date(r.fechaEnvio) : undefined
+      }));
+
+      console.log('✅ DATOS CONVERTIDOS =>', convertidos);
+
+      this.recordatorios.set(convertidos);
       this.cargando.set(false);
-    }, 400);
-  }
+    },
+    error: (err: unknown) => {
+      console.error('❌ Error cargando recordatorios', err);
+      this.cargando.set(false);
+    }
+  });
+}
 
   buscar(valor: string): void {
-    this.terminoBusqueda.set(valor);
+    this.terminoBusqueda.set(valor)
   }
 
   cambiarPreferencia(valor: boolean): void {
-    this.mostrarEnSistema.set(valor);
+    this.mostrarEnSistema.set(valor)
   }
 
-  formatearFecha(fecha: Date): string {
-    return fecha.toLocaleDateString('es-CO', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  }
+  formatearFecha(fecha: string | Date): string {
+  const fechaObj = fecha instanceof Date ? fecha : new Date(fecha);
+
+  return fechaObj.toLocaleDateString('es-CO', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
 }

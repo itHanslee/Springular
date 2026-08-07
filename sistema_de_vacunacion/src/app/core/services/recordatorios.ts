@@ -3,18 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Recordatorio } from '../../shared/models/recordatorios.model';
 
-export interface FiltrosRecordatorio {
-  fechaDesde: Date;
-  fechaHasta: Date;
-}
-
 @Injectable({
   providedIn: 'root'
 })
 export class RecordatorioService {
-  private readonly baseUrl = '/api/recordatorios';
+
+ private readonly baseUrl = 'http://localhost:8080/api/recordatorios';
 
   constructor(private http: HttpClient) {}
+
+  listarTodos(): Observable<Recordatorio[]> {
+    return this.http.get<Recordatorio[]>(this.baseUrl);
+  }
 
   listarPorDocumento(documento: string): Observable<Recordatorio[]> {
     return this.http.get<Recordatorio[]>(
@@ -30,10 +30,7 @@ export class RecordatorioService {
     return this.http.post<Recordatorio>(this.baseUrl, recordatorio);
   }
 
-  actualizar(
-    id: number,
-    cambios: Partial<Recordatorio>
-  ): Observable<Recordatorio> {
+  actualizar(id: number, cambios: Partial<Recordatorio>): Observable<Recordatorio> {
     return this.http.put<Recordatorio>(`${this.baseUrl}/${id}`, cambios);
   }
 
