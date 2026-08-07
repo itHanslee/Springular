@@ -1,7 +1,7 @@
 // shared/models/usuario.model.ts
-export type TipoDocumento = 'CC' | 'TI' | 'CE' | 'PASAPORTE'; // TODO: ajustar a los valores exactos del diagrama
-export type EstadoUsuario = 'ACTIVO' | 'INACTIVO';            // TODO: ajustar a los valores exactos del diagrama
-export type Genero = 'MASCULINO' | 'FEMENINO' | 'OTRO';       // TODO: ajustar a los valores exactos del diagrama
+export type TipoDocumento = 'CC' | 'TI' | 'CE' | 'RC'|'PA'; 
+export type EstadoUsuario = 'ACTIVO' | 'INACTIVO';            
+export type Genero = 'MASCULINO' | 'FEMENINO' | 'OTRO';       
 
 export interface Usuario {
   id: number;

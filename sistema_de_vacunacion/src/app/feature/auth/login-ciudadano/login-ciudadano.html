@@ -1,0 +1,63 @@
+<div class="login-page">
+  <div class="login-header">
+    <h1>Consulta tu Historial de Vacunación</h1>
+    <p>Ingresa tus datos para acceder a tu historial de vacunas</p>
+  </div>
+ 
+  <div class="login-card">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+ 
+      <div class="form-group">
+        <label for="tipoDocumento">Tipo de Documento</label>
+        <select id="tipoDocumento" formControlName="tipoDocumento">
+          <option *ngFor="let opcion of tiposDocumento" [value]="opcion.valor">
+            {{ opcion.etiqueta }}
+          </option>
+        </select>
+      </div>
+ 
+      <div class="form-group">
+        <label for="numeroDocumento">Número de Documento</label>
+        <input
+          id="numeroDocumento"
+          type="text"
+          formControlName="numeroDocumento"
+          placeholder="Ingresa tu número de documento"
+          inputmode="numeric"
+          autocomplete="off"
+        />
+        <span class="field-error" *ngIf="f['numeroDocumento'].touched && f['numeroDocumento'].invalid">
+          Ingresa un número de documento válido.
+        </span>
+      </div>
+ 
+      <div class="form-group">
+        <label for="ultimosDigitos">Confirma los últimos 4 dígitos de tu documento</label>
+        <input
+          id="ultimosDigitos"
+          type="text"
+          formControlName="ultimosDigitos"
+          placeholder="0000"
+          maxlength="4"
+          inputmode="numeric"
+          autocomplete="off"
+        />
+        <span class="field-error" *ngIf="f['ultimosDigitos'].touched && f['ultimosDigitos'].invalid">
+          Ingresa los 4 dígitos.
+        </span>
+        <span
+          class="field-error"
+          *ngIf="loginForm.errors?.['ultimosDigitosNoCoinciden'] && f['ultimosDigitos'].touched"
+        >
+          Los dígitos no coinciden con tu número de documento.
+        </span>
+      </div>
+ 
+      <div class="alert-error" *ngIf="mensajeError()">{{ mensajeError() }}</div>
+ 
+      <button type="submit" class="btn-submit" [disabled]="cargando()">
+        {{ cargando() ? 'Consultando...' : 'Consultar' }}
+      </button>
+    </form>
+  </div>
+</div>

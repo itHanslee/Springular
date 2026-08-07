@@ -1,7 +1,7 @@
 // feature/administrador/auditorias-globales/auditorias-globales.ts
 import { Component, OnInit, signal, computed } from '@angular/core';
-import { AuditoriaService } from '../../../core/services/administrador/auditoria';
-import { Auditoria, TipoAuditoria } from '../../../shared/models/administrador/auditoria.model';
+import { AuditoriaService } from '../../../core/services/auditoria';
+import { Auditoria, TipoAuditoria } from '../../../shared/models/auditoria.model';
 
 @Component({
   selector: 'app-auditorias-globales',

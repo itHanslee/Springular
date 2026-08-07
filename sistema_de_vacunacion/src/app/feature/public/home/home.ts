@@ -15,6 +15,6 @@ export class Home {
   constructor(private router: Router) {}
 
   irAConsultarCertificado(): void {
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login-ciudadano']);
   }
 }
