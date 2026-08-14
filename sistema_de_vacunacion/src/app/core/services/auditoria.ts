@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Auditoria } from '../../../app/shared/models/auditoria.model';
-
+import { Auditoria } from '../../shared/models/auditoria.model';
+import { API } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class AuditoriaService {
-  private readonly baseUrl = '/api/auditorias';
+  private readonly baseUrl = API.AUDITORIA.BASE;
 
   constructor(private http: HttpClient) {}
 

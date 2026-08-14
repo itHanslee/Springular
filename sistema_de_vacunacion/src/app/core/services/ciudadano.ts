@@ -8,7 +8,7 @@ import { Ciudadano } from '../../shared/models/ciudadano.model';
 
 @Injectable({ providedIn: 'root' })
 export class CiudadanoService {
-  private readonly baseUrl = 'http://localhost:8080/api/ciudadanos';
+  private readonly baseUrl = '';
 
   constructor(private http: HttpClient) {}
 

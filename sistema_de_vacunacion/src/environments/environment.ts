@@ -12,7 +12,7 @@ export const API = {
     POR_ID: (id: number) => `${API_BASE_URL.apiUrl}/api/usuarios/${id}`
   },
 
-  
+
 
   CIUDADANOS: {
     PERFIL: (id: number) => `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/perfil`,
@@ -21,8 +21,10 @@ export const API = {
 
   ADMIN: {
     PERSONAL_SALUD: `${API_BASE_URL.apiUrl}/api/admin/personal-salud`,
-    ESTADO_PERSONAL: (id: number) =>
-      `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}/estado`
+
+    ACTUALIZAR_PERSONAL_SALUD: (id: number) =>
+      `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}`
+
   },
 
   PERSONAL_SALUD: {
@@ -59,6 +61,10 @@ export const API = {
 
     HISTORIAL: (idCiudadano: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunaciones/ciudadano/${idCiudadano}/historial`
+  },
+
+  AUDITORIA: {
+    BASE: `${API_BASE_URL.apiUrl}/api/auditoria`
   },
 
   RECORDATORIOS: {

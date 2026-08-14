@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PersonalSalud } from '../../shared/models/personal-salud.model';
-
+import { API } from '../../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class PersonalSaludService {
-  private readonly baseUrl = '';
+  private readonly baseUrl = API.PERSONAL_SALUD.CIUDADANOS;
 
   constructor(private http: HttpClient) {}
 
