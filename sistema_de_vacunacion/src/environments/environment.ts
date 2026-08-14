@@ -8,8 +8,11 @@ export const API = {
 
   USUARIOS: {
     BASE: `${API_BASE_URL.apiUrl}/api/usuarios`,
+    ME: `${API_BASE_URL.apiUrl}/api/usuarios/me`,
     POR_ID: (id: number) => `${API_BASE_URL.apiUrl}/api/usuarios/${id}`
   },
+
+  
 
   CIUDADANOS: {
     PERFIL: (id: number) => `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/perfil`,

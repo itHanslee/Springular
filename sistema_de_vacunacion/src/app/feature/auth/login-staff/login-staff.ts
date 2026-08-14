@@ -50,8 +50,11 @@ export class LoginStaffComponent {
 
     this.authService.loginStaff(request).subscribe({
       next: (respuesta) => {
+        console.log('RESPUESTA LOGIN:', respuesta);
+        console.log('ROL RECIBIDO:', respuesta.rol);
         this.cargando.set(false);
-        const destino = respuesta.tipoUsuario === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
+        const rol = respuesta.rol;
+        const destino = respuesta.rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
         this.router.navigate([destino]);
       },
       error: (error: HttpErrorResponse) => {
