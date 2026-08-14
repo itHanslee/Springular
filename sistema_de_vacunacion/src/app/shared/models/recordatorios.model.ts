@@ -6,7 +6,6 @@ export interface Recordatorio {
   fechaProgramada: string | Date;
   fechaEnvio?: string | Date | null;
   mensaje: string;
-  estado: string;
   idUsuario: number;   
   idEsquema: number;   
   estado: Estado;
