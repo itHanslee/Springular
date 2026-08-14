@@ -57,8 +57,30 @@ export class AuthService {
     );
   }
 
-  cargarUsuarioActual(): Observable<Usuario> {
+  private guardarSesion(response: LoginResponse): void {
+    localStorage.setItem(
+      CLAVE_SESION,
+      JSON.stringify(response)
+    );
+  }
 
+  obtenerToken(): string | null {
+    const sesion = localStorage.getItem(CLAVE_SESION);
+
+    if (!sesion) {
+      return null;
+    }
+
+    try {
+      const response = JSON.parse(sesion) as LoginResponse;
+      return response.token ?? null;
+    } catch {
+      localStorage.removeItem(CLAVE_SESION);
+      return null;
+    }
+  }
+
+  cargarUsuarioActual(): Observable<Usuario> {
     return this.http.get<Usuario>(
       API.USUARIOS.ME
     ).pipe(
@@ -77,42 +99,14 @@ export class AuthService {
     return this.usuario();
   }
 
-  obtenerToken(): string | null {
-
-    const sesion = localStorage.getItem(CLAVE_SESION);
-
-    if (!sesion) {
-      return null;
-    }
-
-    try {
-      const response: LoginResponse = JSON.parse(sesion);
-
-      return response.token;
-
-    } catch {
-      return null;
-    }
-  }
-
   cerrarSesion(): void {
-
     localStorage.removeItem(CLAVE_SESION);
     localStorage.removeItem(CLAVE_USUARIO);
 
     this.usuario.set(null);
   }
 
-  private guardarSesion(response: LoginResponse): void {
-
-    localStorage.setItem(
-      CLAVE_SESION,
-      JSON.stringify(response)
-    );
-  }
-
   private cargarUsuarioGuardado(): void {
-
     const usuarioGuardado =
       localStorage.getItem(CLAVE_USUARIO);
 
@@ -121,13 +115,10 @@ export class AuthService {
     }
 
     try {
-
       this.usuario.set(
         JSON.parse(usuarioGuardado) as Usuario
       );
-
     } catch {
-
       localStorage.removeItem(CLAVE_USUARIO);
     }
   }

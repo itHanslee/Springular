@@ -1,7 +1,9 @@
 <!-- feature/administrador/personal-salud/personal-salud.html -->
 <section class="personal-salud">
   <h1>Personal de salud</h1>
-  <p class="subtitulo">Registro y gestión del personal de salud del sistema</p>
+  <p class="subtitulo">
+    Registro y gestión del personal de salud del sistema
+  </p>
 
   <div class="toolbar">
     <div class="campo-busqueda">
@@ -10,118 +12,347 @@
         placeholder="Buscar por nombre o documento"
         (input)="buscar($any($event.target).value)"
       />
-      <span class="icono-buscar"><i class="bi bi-search"></i></span>
+
+      <span class="icono-buscar">
+        <i class="bi bi-search"></i>
+      </span>
     </div>
 
-    <button class="btn-nueva" (click)="toggleFormulario()">
-      <span class="icono-mas">{{ mostrarFormulario() ? '✕' : '+' }}</span>
-      {{ personaEnEdicion() ? 'Editando' : 'Registrar' }}
+    <button
+      type="button"
+      class="btn-nueva"
+      (click)="toggleFormulario()"
+    >
+      <span class="icono-mas">
+        {{ mostrarFormulario() ? '✕' : '+' }}
+      </span>
+
+      {{
+        personaEnEdicion()
+          ? 'Editar personal'
+          : 'Registrar'
+      }}
     </button>
   </div>
 
   @if (mostrarFormulario()) {
-    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-nuevo">
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="guardar()"
+      class="form-nuevo"
+    >
+
       <div class="campo">
-        <label>Tipo de documento</label>
-        <select formControlName="tipoDocumento">
-          <option value="" disabled>Seleccione</option>
-          @for (opcion of opcionesTipoDocumento; track opcion) {
-            <option [value]="opcion">{{ opcion }}</option>
+        <label for="tipoDocumento">
+          Tipo de documento
+        </label>
+
+        <select
+          id="tipoDocumento"
+          formControlName="tipoDocumento"
+        >
+          <option value="" disabled>
+            Seleccione
+          </option>
+
+          @for (
+            opcion of opcionesTipoDocumento;
+            track opcion
+          ) {
+            <option [value]="opcion">
+              {{ opcion }}
+            </option>
           }
         </select>
       </div>
 
       <div class="campo">
-        <label>Número de documento</label>
-        <input formControlName="numeroDocumento" placeholder="Ej. 1032450001" />
+        <label for="numeroDocumento">
+          Número de documento
+        </label>
+
+        <input
+          id="numeroDocumento"
+          formControlName="numeroDocumento"
+          placeholder="Ej. 1032450001"
+        />
       </div>
 
       <div class="campo">
-        <label>Nombre</label>
-        <input formControlName="nombre" placeholder="Ej. Ana" />
+        <label for="nombre">
+          Nombre
+        </label>
+
+        <input
+          id="nombre"
+          formControlName="nombre"
+          placeholder="Ej. Ana"
+        />
       </div>
 
       <div class="campo">
-        <label>Apellido</label>
-        <input formControlName="apellido" placeholder="Ej. Ríos" />
+        <label for="apellido">
+          Apellido
+        </label>
+
+        <input
+          id="apellido"
+          formControlName="apellido"
+          placeholder="Ej. Ríos"
+        />
       </div>
 
       <div class="campo">
-        <label>Cargo</label>
-        <input formControlName="cargo" placeholder="Ej. Enfermera" />
+        <label for="cargo">
+          Cargo
+        </label>
+
+        <input
+          id="cargo"
+          formControlName="cargo"
+          placeholder="Ej. Enfermera"
+        />
       </div>
 
       <div class="campo">
-        <label>Email</label>
-        <input formControlName="email" type="email" placeholder="Ej. ana.rios@correo.com" />
+        <label for="email">
+          Email
+        </label>
+
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          placeholder="Ej. ana.rios@correo.com"
+        />
       </div>
 
       <div class="campo">
-        <label>Teléfono</label>
-        <input formControlName="telefono" placeholder="Ej. 3001234567" />
+        <label for="contrasena">
+          Contraseña
+        </label>
+
+        <input
+          id="contrasena"
+          formControlName="contrasena"
+          type="password"
+          autocomplete="new-password"
+          [placeholder]="
+            personaEnEdicion()
+              ? 'Dejar vacío para conservar la actual'
+              : 'Mínimo 8 caracteres'
+          "
+        />
+
+        @if (personaEnEdicion()) {
+          <small class="ayuda-campo">
+            Déjala vacía para conservar la contraseña actual.
+          </small>
+        }
       </div>
 
       <div class="campo">
-        <label>Fecha de nacimiento</label>
-        <input formControlName="fechaNacimiento" type="date" />
+        <label for="telefono">
+          Teléfono
+        </label>
+
+        <input
+          id="telefono"
+          formControlName="telefono"
+          placeholder="Ej. 3001234567"
+        />
       </div>
 
       <div class="campo">
-        <label>Género</label>
-        <select formControlName="genero">
-          <option value="" disabled>Seleccione</option>
-          @for (opcion of opcionesGenero; track opcion) {
-            <option [value]="opcion">{{ opcion }}</option>
+        <label for="fechaNacimiento">
+          Fecha de nacimiento
+        </label>
+
+        <input
+          id="fechaNacimiento"
+          formControlName="fechaNacimiento"
+          type="date"
+        />
+      </div>
+
+      <div class="campo">
+        <label for="genero">
+          Género
+        </label>
+
+        <select
+          id="genero"
+          formControlName="genero"
+        >
+          <option value="" disabled>
+            Seleccione
+          </option>
+
+          @for (
+            opcion of opcionesGenero;
+            track opcion
+          ) {
+            <option [value]="opcion">
+              {{
+                opcion === 'MASCULINO'
+                  ? 'Masculino'
+                  : opcion === 'FEMENINO'
+                  ? 'Femenino'
+                  : 'Otro'
+              }}
+            </option>
           }
         </select>
       </div>
 
       <div class="campo campo-ancho">
-        <label>Dirección</label>
-        <input formControlName="direccion" placeholder="Ej. Calle 45 #12-30" />
+        <label for="direccion">
+          Dirección
+        </label>
+
+        <input
+          id="direccion"
+          formControlName="direccion"
+          placeholder="Ej. Calle 45 #12-30"
+        />
       </div>
 
-      <button type="submit" class="btn-guardar" [disabled]="form.invalid">
+      <button
+        type="submit"
+        class="btn-guardar"
+        [disabled]="form.invalid"
+      >
         {{ personaEnEdicion() ? 'Actualizar' : 'Guardar' }}
       </button>
+
     </form>
   }
 
   @if (cargando()) {
-    <p class="estado-carga">Cargando personal de salud...</p>
+
+    <p class="estado-carga">
+      Cargando personal de salud...
+    </p>
+
   } @else {
+
     <table class="tabla">
+
       <thead>
         <tr>
           <th>Nombre</th>
+          <th>Correo electrónico</th>
           <th>Documento</th>
           <th>Cargo</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
+
       <tbody>
-        @for (persona of personalFiltrado(); track persona.id) {
+
+        @for (
+          persona of personalFiltrado();
+          track persona.id
+        ) {
+
           <tr>
-            <td>{{ persona.nombre }} {{ persona.apellido }}</td>
-            <td>{{ persona.tipoDocumento }} {{ persona.numeroDocumento }}</td>
-            <td>{{ persona.cargo }}</td>
-            <td>{{ persona.estado === 'ACTIVO' ? 'Activo' : 'Inactivo' }}</td>
+
+            <td>
+              <div class="usuario-tabla">
+                <strong>
+                  {{ persona.nombre }}
+                  {{ persona.apellido }}
+                </strong>
+
+                
+              </div>
+            </td>
+            <td>
+              <span>
+                  {{ persona.email }}
+                </span>
+            </td>
+            <td>
+              {{ persona.tipoDocumento }}
+              {{ persona.numeroDocumento }}
+            </td>
+
+            <td>
+              {{ persona.cargo }}
+            </td>
+
+            <td>
+              <span
+                class="estado"
+                [class.estado-activo]="persona.estado === 'ACTIVO'"
+                [class.estado-inactivo]="persona.estado === 'INACTIVO'"
+              >
+                <span class="estado-punto"></span>
+
+                {{
+                  persona.estado === 'ACTIVO'
+                    ? 'Activo'
+                    : 'Inactivo'
+                }}
+              </span>
+            </td>
+
             <td class="acciones">
-              <button class="btn-editar" (click)="editar(persona)" title="Editar">
+
+              <button
+                type="button"
+                class="btn-editar"
+                (click)="editar(persona)"
+                title="Editar"
+              >
                 <i class="bi bi-pencil-square"></i>
               </button>
-              <button class="btn-eliminar" (click)="eliminar(persona)" title="Eliminar">
-                <i class="bi bi-trash"></i>
+
+              <button
+                type="button"
+                class="btn-estado"
+                [class.btn-desactivar]="persona.estado === 'ACTIVO'"
+                [class.btn-activar]="persona.estado === 'INACTIVO'"
+                (click)="cambiarEstado(persona)"
+                [title]="
+                  persona.estado === 'ACTIVO'
+                    ? 'Desactivar personal'
+                    : 'Activar personal'
+                "
+              >
+                <i
+                  class="bi"
+                  [class.bi-person-dash]="persona.estado === 'ACTIVO'"
+                  [class.bi-person-check]="persona.estado === 'INACTIVO'"
+                ></i>
+
+                {{
+                  persona.estado === 'ACTIVO'
+                    ? 'Desactivar'
+                    : 'Activar'
+                }}
               </button>
+
             </td>
+
           </tr>
+
         }
+
       </tbody>
+
     </table>
 
     @if (!hayResultados()) {
-      <p class="sin-resultados">No se encontró personal de salud con ese criterio.</p>
+
+      <p class="sin-resultados">
+        No se encontró personal de salud con ese criterio.
+      </p>
+
     }
+
   }
+
 </section>

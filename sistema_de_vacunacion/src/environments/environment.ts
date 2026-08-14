@@ -19,13 +19,16 @@ export const API = {
     CARNE: (id: number) => `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/carne`
   },
 
-  ADMIN: {
-    PERSONAL_SALUD: `${API_BASE_URL.apiUrl}/api/admin/personal-salud`,
+ ADMIN: {
+  PERSONAL_SALUD:
+    `${API_BASE_URL.apiUrl}/api/admin/personal-salud`,
 
-    ACTUALIZAR_PERSONAL_SALUD: (id: number) =>
-      `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}`
+  PERSONAL_SALUD_POR_ID: (id: number) =>
+    `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}`,
 
-  },
+  ESTADO_PERSONAL: (id: number) =>
+    `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}/estado`
+},
 
   PERSONAL_SALUD: {
     CIUDADANOS: `${API_BASE_URL.apiUrl}/api/personal-salud/ciudadanos`,

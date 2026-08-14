@@ -10,7 +10,13 @@ import { PersonalSalud } from '../../shared/models/personal-salud.model';
 })
 export class AdministradorService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  listarPersonalSalud(): Observable<PersonalSalud[]> {
+    return this.http.get<PersonalSalud[]>(
+      API.ADMIN.PERSONAL_SALUD
+    );
+  }
 
   registrarPersonalSalud(
     personal: Partial<PersonalSalud>
@@ -22,14 +28,27 @@ export class AdministradorService {
     );
   }
 
-  cambiarEstadoPersonalSalud(
-    id: number,
-    estado: string
-  ): Observable<PersonalSalud> {
+    actualizarPersonalSalud(
+      id: number,
+      datos: Partial<PersonalSalud>
+    ): Observable<PersonalSalud> {
+      return this.http.put<PersonalSalud>(
+        API.ADMIN.PERSONAL_SALUD_POR_ID(id),
+        datos
+      );
+    }
 
-    return this.http.patch<PersonalSalud>(
-      API.ADMIN.ACTUALIZAR_PERSONAL_SALUD(id),
-      { estado }
+
+    cambiarEstadoPersonalSalud(
+    id: number,
+    estado: 'ACTIVO' | 'INACTIVO'
+  ): Observable<void> {
+    return this.http.patch<void>(
+      API.ADMIN.ESTADO_PERSONAL(id),
+      null,
+      {
+        params: { estado }
+      }
     );
   }
 }

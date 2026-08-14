@@ -176,7 +176,7 @@
 }
 
 .btn-editar,
-.btn-eliminar {
+.btn-estado{
   background: transparent;
   border: none;
   color: var(--color-primary);

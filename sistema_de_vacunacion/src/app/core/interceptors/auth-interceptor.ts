@@ -1,31 +1,38 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
+const CLAVE_SESION = 'delta_sesion';
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-  if (
-    req.url.includes('/auth/login-ciudadano') ||
-    req.url.includes('/auth/login-staff')
-  ) {
+  const esLogin = req.url.includes('/api/auth/login');
+
+  if (esLogin) {
     return next(req);
   }
 
-  const session = localStorage.getItem('delta_sesion');
+  const sesion = localStorage.getItem(CLAVE_SESION);
 
-  if (!session) {
+  if (!sesion) {
     return next(req);
   }
 
-  const data = JSON.parse(session);
+  try {
+    const data = JSON.parse(sesion);
 
-  if (!data.token) {
-    return next(req);
-  }
-
-  const clonedRequest = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${data.token}`
+    if (!data.token) {
+      return next(req);
     }
-  });
 
-  return next(clonedRequest);
+    const requestConToken = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${data.token}`
+      }
+    });
+
+    return next(requestConToken);
+
+  } catch {
+    localStorage.removeItem(CLAVE_SESION);
+    return next(req);
+  }
 };
