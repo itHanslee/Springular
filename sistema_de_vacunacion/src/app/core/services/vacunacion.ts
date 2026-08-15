@@ -3,9 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import {
-  VacunaPendiente,
-  Vacunacion as VacunacionModel
+  Vacunacion as VacunacionModel,
+  VacunaPendiente
 } from '../../shared/models/vacunacion.model';
+
+import { API } from '../../../environments/environment';
 
 export interface FiltrosReporte {
   fechaDesde: Date;
@@ -18,31 +20,56 @@ export interface FiltrosReporte {
   providedIn: 'root'
 })
 export class VacunacionService {
-  private readonly baseUrl = '/api/vacunaciones';
 
   constructor(private http: HttpClient) {}
-
-  buscarPendientePorDocumento(documento: string): Observable<VacunaPendiente> {
-    return this.http.get<VacunaPendiente>(
-      `${this.baseUrl}/pendiente/${encodeURIComponent(documento)}`
-    );
-  }
 
   registrarAplicacion(
     datos: Partial<VacunacionModel>
   ): Observable<VacunacionModel> {
-    return this.http.post<VacunacionModel>(this.baseUrl, datos);
-  }
 
-  obtenerHistorial(documento: string): Observable<VacunacionModel[]> {
-    return this.http.get<VacunacionModel[]>(
-      `${this.baseUrl}/historial/${encodeURIComponent(documento)}`
+    return this.http.post<VacunacionModel>(
+      API.VACUNACIONES.BASE,
+      datos
     );
   }
 
-  generarReporte(filtros: FiltrosReporte): Observable<Blob> {
-    return this.http.post(`${this.baseUrl}/reportes`, filtros, {
-      responseType: 'blob'
-    });
+  obtenerVacunasCiudadano(
+    idCiudadano: number
+  ): Observable<VacunacionModel[]> {
+
+    return this.http.get<VacunacionModel[]>(
+      API.VACUNACIONES.POR_CIUDADANO(idCiudadano)
+    );
+  }
+
+  obtenerHistorial(
+    idCiudadano: number
+  ): Observable<VacunacionModel[]> {
+
+    return this.http.get<VacunacionModel[]>(
+      API.VACUNACIONES.HISTORIAL(idCiudadano)
+    );
+  }
+
+  obtenerVacunasPendientes(
+    idCiudadano: number
+  ): Observable<VacunaPendiente[]> {
+
+    return this.http.get<VacunaPendiente[]>(
+      API.VACUNACIONES.PENDIENTES(idCiudadano)
+    );
+  }
+
+  generarReporte(
+    filtros: FiltrosReporte
+  ): Observable<Blob> {
+
+    return this.http.post(
+      API.REPORTES.VACUNACIONES,
+      filtros,
+      {
+        responseType: 'blob'
+      }
+    );
   }
 }

@@ -1,22 +1,29 @@
-// core/services/ciudadano.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import {delay} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
 import { Ciudadano } from '../../shared/models/ciudadano.model';
+import { API } from '../../../environments/environment';
 
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class CiudadanoService {
-  private readonly baseUrl = '';
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<Ciudadano[]> {
-    return this.http.get<Ciudadano[]>(this.baseUrl);
+  obtenerPerfil(id: number): Observable<Ciudadano> {
+    return this.http.get<Ciudadano>(
+      API.CIUDADANOS.PERFIL(id)
+    );
   }
 
-  registrar(ciudadano: Partial<Ciudadano>): Observable<Ciudadano> {
-    return this.http.post<Ciudadano>(this.baseUrl, ciudadano);
+  descargarCarne(id: number): Observable<Blob> {
+    return this.http.get(
+      API.CIUDADANOS.CARNE(id),
+      {
+        responseType: 'blob'
+      }
+    );
   }
 }

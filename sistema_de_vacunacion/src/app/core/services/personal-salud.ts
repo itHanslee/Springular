@@ -1,27 +1,48 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { PersonalSalud } from '../../shared/models/personal-salud.model';
+
+import { Ciudadano } from '../../shared/models/ciudadano.model';
 import { API } from '../../../environments/environment';
-@Injectable({ providedIn: 'root' })
+
+@Injectable({
+  providedIn: 'root'
+})
 export class PersonalSaludService {
-  private readonly baseUrl = API.PERSONAL_SALUD.CIUDADANOS;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  listar(): Observable<PersonalSalud[]> {
-    return this.http.get<PersonalSalud[]>(this.baseUrl);
+  listar(): Observable<Ciudadano[]> {
+    return this.http.get<Ciudadano[]>(
+      API.PERSONAL_SALUD.CIUDADANOS
+    );
   }
 
-  registrar(persona: Partial<PersonalSalud>): Observable<PersonalSalud> {
-    return this.http.post<PersonalSalud>(this.baseUrl, persona);
+  registrarCiudadano(
+    ciudadano: Partial<Ciudadano>
+  ): Observable<Ciudadano> {
+    return this.http.post<Ciudadano>(
+      API.PERSONAL_SALUD.CIUDADANOS,
+      ciudadano
+    );
   }
 
-  actualizar(id: number, cambios: Partial<PersonalSalud>): Observable<PersonalSalud> {
-    return this.http.put<PersonalSalud>(`${this.baseUrl}/${id}`, cambios);
+  actualizarCiudadano(
+    id: number,
+    cambios: Partial<Ciudadano>
+  ): Observable<void> {
+    return this.http.put<void>(
+      API.PERSONAL_SALUD.CIUDADANO_POR_ID(id),
+      cambios
+    );
   }
 
-  eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  obtenerCiudadanoPorDocumento(
+    documento: string
+  ): Observable<Ciudadano> {
+
+    return this.http.get<Ciudadano>(
+      API.PERSONAL_SALUD.CIUDADANO_POR_DOCUMENTO(documento)
+    );
   }
 }

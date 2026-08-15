@@ -1,4 +1,4 @@
-export type viaAdministracion = "oral" | "intramuscular"| "subcutanea" | "intradermica";
+export type viaAdministracion = "oral" | "intramuscular" | "subcutanea" | "intradermica";
 export type estadoVacuna = "Activa" | "Inactiva";
 
 export interface Vacuna {
@@ -13,4 +13,7 @@ export interface Vacuna {
     stock: number;
     estado: estadoVacuna;
     fechaVencimiento: Date;
+    idCiudadano: number;
+    idInventario: number | null;
+    fechaProgramada: string;
 }

@@ -9,42 +9,51 @@ export const API = {
   USUARIOS: {
     BASE: `${API_BASE_URL.apiUrl}/api/usuarios`,
     ME: `${API_BASE_URL.apiUrl}/api/usuarios/me`,
-    POR_ID: (id: number) => `${API_BASE_URL.apiUrl}/api/usuarios/${id}`
+    POR_ID: (id: number) =>
+      `${API_BASE_URL.apiUrl}/api/usuarios/${id}`
   },
-
-
 
   CIUDADANOS: {
-    PERFIL: (id: number) => `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/perfil`,
-    CARNE: (id: number) => `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/carne`
+    PERFIL: (id: number) =>
+      `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/perfil`,
+
+    CARNE: (id: number) =>
+      `${API_BASE_URL.apiUrl}/api/ciudadanos/${id}/carne`
   },
 
- ADMIN: {
-  PERSONAL_SALUD:
-    `${API_BASE_URL.apiUrl}/api/admin/personal-salud`,
+  ADMIN: {
+    PERSONAL_SALUD:
+      `${API_BASE_URL.apiUrl}/api/admin/personal-salud`,
 
-  PERSONAL_SALUD_POR_ID: (id: number) =>
-    `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}`,
+    PERSONAL_SALUD_POR_ID: (id: number) =>
+      `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}`,
 
-  ESTADO_PERSONAL: (id: number) =>
-    `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}/estado`
-},
+    ESTADO_PERSONAL: (id: number) =>
+      `${API_BASE_URL.apiUrl}/api/admin/personal-salud/${id}/estado`
+  },
 
   PERSONAL_SALUD: {
-    CIUDADANOS: `${API_BASE_URL.apiUrl}/api/personal-salud/ciudadanos`,
+    CIUDADANOS:
+      `${API_BASE_URL.apiUrl}/api/personal-salud/ciudadanos`,
+
     CIUDADANO_POR_ID: (id: number) =>
-      `${API_BASE_URL.apiUrl}/api/personal-salud/ciudadanos/${id}`
+      `${API_BASE_URL.apiUrl}/api/personal-salud/ciudadanos/${id}`,
+
+    CIUDADANO_POR_DOCUMENTO: (documento: string) =>
+      `${API_BASE_URL.apiUrl}/api/personal-salud/ciudadanos/documento/${encodeURIComponent(documento)}`
   },
 
   VACUNAS: {
     BASE: `${API_BASE_URL.apiUrl}/api/vacunas`,
+
     POR_ID: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunas/${id}`,
 
     ESTADO: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunas/${id}/estado`,
 
-    LOTES: `${API_BASE_URL.apiUrl}/api/vacunas/lotes`,
+    LOTES:
+      `${API_BASE_URL.apiUrl}/api/vacunas/lotes`,
 
     LOTES_POR_VACUNA: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunas/${id}/lotes`,
@@ -57,21 +66,32 @@ export const API = {
   },
 
   VACUNACIONES: {
-    BASE: `${API_BASE_URL.apiUrl}/api/vacunaciones`,
+    BASE:
+      `${API_BASE_URL.apiUrl}/api/vacunaciones`,
 
     POR_CIUDADANO: (idCiudadano: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunaciones/ciudadano/${idCiudadano}`,
 
     HISTORIAL: (idCiudadano: number) =>
-      `${API_BASE_URL.apiUrl}/api/vacunaciones/ciudadano/${idCiudadano}/historial`
+      `${API_BASE_URL.apiUrl}/api/vacunaciones/ciudadano/${idCiudadano}/historial`,
+
+    PENDIENTES: (idCiudadano: number) =>
+      `${API_BASE_URL.apiUrl}/api/vacunaciones/ciudadano/${idCiudadano}/pendientes`
+  },
+
+  REPORTES: {
+    VACUNACIONES:
+      `${API_BASE_URL.apiUrl}/api/reportes/vacunaciones`
   },
 
   AUDITORIA: {
-    BASE: `${API_BASE_URL.apiUrl}/api/auditoria`
+    BASE:
+      `${API_BASE_URL.apiUrl}/api/auditoria`
   },
 
   RECORDATORIOS: {
-    BASE: `${API_BASE_URL.apiUrl}/api/recordatorios`,
+    BASE:
+      `${API_BASE_URL.apiUrl}/api/recordatorios`,
 
     POR_ID: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/recordatorios/${id}`,
@@ -82,5 +102,4 @@ export const API = {
     ENVIADO: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/recordatorios/${id}/enviado`
   }
-
 };

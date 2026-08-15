@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { HttpErrorResponse } from '@angular/common/http';
 import { VacunacionService } from '../../../core/services/vacunacion';
 import { VacunaPendiente } from '../../../shared/models/vacunacion.model';
+import { PersonalSaludService } from '../../../core/services/personal-salud';
 
 @Component({
   selector: 'app-registrar-vacunacion',
@@ -24,6 +25,7 @@ export class RegistrarVacunacion {
 
   constructor(
     private vacunacionService: VacunacionService,
+    private personalSaludService: PersonalSaludService,
     private fb: FormBuilder
   ) {
     const hoy = new Date().toISOString().substring(0, 10);
@@ -48,21 +50,40 @@ export class RegistrarVacunacion {
     this.mensajeExito.set(null);
     this.pendiente.set(null);
 
-    this.vacunacionService.buscarPendientePorDocumento(documento).subscribe({
-      next: (resultado: VacunaPendiente) => {
-        this.buscando.set(false);
-        if (!resultado) {
-          this.mensajeError.set('No se encontró un ciudadano con ese documento, o no tiene dosis pendientes.');
-          return;
+    this.personalSaludService
+      .obtenerCiudadanoPorDocumento(documento)
+      .subscribe({
+        next: (ciudadano) => {
+
+          this.vacunacionService
+            .obtenerVacunasPendientes(ciudadano.id)
+            .subscribe({
+              next: (pendientes) => {
+
+                // Aquí guardas los pendientes
+                // según cómo esté definido tu componente.
+                console.log('Ciudadano:', ciudadano);
+                console.log('Pendientes:', pendientes);
+
+              },
+
+              error: (error) => {
+                console.error(
+                  'Error al obtener vacunas pendientes:',
+                  error
+                );
+              }
+            });
+
+        },
+
+        error: (error) => {
+          console.error(
+            'Error al buscar ciudadano:',
+            error
+          );
         }
-        this.pendiente.set(resultado);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.buscando.set(false);
-        const errorMsg = error.error?.message || 'No se encontró el ciudadano o no tiene vacunas pendientes.';
-        this.mensajeError.set(errorMsg);
-      }
-    });
+      });
   }
 
   registrar(): void {
@@ -87,7 +108,7 @@ export class RegistrarVacunacion {
         this.registrando.set(false);
         this.mensajeExito.set('Aplicación registrada correctamente.');
         this.pendiente.set(null);
-        
+
         const hoy = new Date().toISOString().substring(0, 10);
         this.form.reset({ fechaAplicacion: hoy });
         this.documentoBusqueda.set('');
