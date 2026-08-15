@@ -1,1 +1,1 @@
-export type NumeroDosis = "Primera" | "Segunda" | "Tercera" | "Refuerzo" | "Unica";
+export type NumeroDosis = "PRIMERA" | "SEGUNDA" | "TERCERA" | "REFUERZO" | "UNICA";

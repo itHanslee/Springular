@@ -1,13 +1,18 @@
 import { NumeroDosis } from './numero-dosis.model';
 
 export interface VacunaPendiente {
-    nombreCiudadano: string;
-    documentoCiudadano: string;
-    vacunaNombre: string;
-    numeroLote: string;
-    dosis: NumeroDosis;
-    descripcion: string;
+  idCiudadano: number;
+  idInventario: number | null;
+  nombreCiudadano: string;
+  documentoCiudadano: string;
+  vacunaNombre: string;
+  numeroLote: string;
+  dosis: NumeroDosis;
+  descripcion: string;
+  fechaProgramada: string;
 }
+
+
 
 export interface Vacunacion {
   id: number;
