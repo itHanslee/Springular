@@ -12,12 +12,15 @@
       />
     </div>
     <button class="btn-primario" (click)="toggleFormulario()">
-      {{ mostrarFormulario() ? '✕' : '+' }} Registrar
+      {{ mostrarFormulario() ? '✕' : '+' }} 
+      {{ ciudadanoEnEdicion()
+          ? 'Cancelar edición'
+          : 'Registrar' }}
     </button>
   </div>
 
   @if (mostrarFormulario()) {
-    <form [formGroup]="form" (ngSubmit)="registrar()" class="form-nuevo">
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-nuevo">
       <div class="campo">
         <label>Tipo de documento</label>
         <select formControlName="tipoDocumento">
@@ -71,7 +74,11 @@
         <input formControlName="direccion" placeholder="Ej. Calle 45 #12-30" />
       </div>
 
-      <button type="submit" class="btn-guardar" [disabled]="form.invalid">Guardar</button>
+      <button type="submit" class="btn-guardar" [disabled]="form.invalid">
+        {{ ciudadanoEnEdicion()
+            ? 'Actualizar'
+            : 'Guardar' }}
+      </button>
     </form>
   }
 
@@ -83,6 +90,7 @@
           <th>Documento</th>
           <th>Edad</th>
           <th>Última vacuna aplicada</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -92,6 +100,18 @@
             <td>{{ ciudadano.numeroDocumento }}</td>
             <td>{{ edadDe(ciudadano.fechaNacimiento) }}</td>
             <td>{{ ciudadano.ultimaVacunaAplicada || '—' }}</td>
+             <td>
+
+            <button
+              type="button"
+              class="btn-editar"
+              (click)="editar(ciudadano)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+          </td>
           </tr>
         }
       </tbody>

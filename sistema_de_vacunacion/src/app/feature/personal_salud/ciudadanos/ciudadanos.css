@@ -131,6 +131,20 @@
   opacity: 0.7;
 }
 
+.btn-editar,
+.btn-estado{
+  background: transparent;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.btn-editar:hover {
+  color: var(--color-primary-dark);
+}
+
 .estado-carga {
   color: var(--color-text-muted);
   padding: 2rem 0;

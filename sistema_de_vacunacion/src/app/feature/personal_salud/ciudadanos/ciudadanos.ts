@@ -18,6 +18,9 @@ export class Ciudadanos implements OnInit {
   terminoBusqueda = signal('');
   mostrarFormulario = signal(false);
 
+    // Ciudadano que se está editando
+  ciudadanoEnEdicion = signal<Ciudadano | null>(null);
+
   opcionesTipoDocumento = ["CC", "RC", "TI", "CE", "PA"];
   opcionesGenero = ["MASCULINO", "FEMENINO", "OTRO"];
 
@@ -33,7 +36,7 @@ export class Ciudadanos implements OnInit {
 
   hayResultados = computed(() => this.ciudadanosFiltrados().length > 0);
 
-  form: FormGroup; // 👈 solo se declara el tipo aquí, sin inicializar
+  form: FormGroup;
 
   constructor(
     private personalSaludService: PersonalSaludService,
@@ -82,27 +85,156 @@ export class Ciudadanos implements OnInit {
 
   toggleFormulario(): void {
     this.mostrarFormulario.update(v => !v);
+
     if (!this.mostrarFormulario()) {
-      this.form.reset();
+      this.cancelarEdicion();
     }
   }
 
-  registrar(): void {
+
+  // EDITAR CIUDADANO
+  
+
+  editar(ciudadano: Ciudadano): void {
+
+    this.ciudadanoEnEdicion.set(ciudadano);
+
+    this.mostrarFormulario.set(true);
+
+    this.form.patchValue({
+      numeroDocumento: ciudadano.numeroDocumento,
+      tipoDocumento: ciudadano.tipoDocumento,
+      nombre: ciudadano.nombre,
+      apellido: ciudadano.apellido,
+      email: ciudadano.email,
+      telefono: ciudadano.telefono,
+      fechaNacimiento: ciudadano.fechaNacimiento,
+      genero: ciudadano.genero,
+      direccion: ciudadano.direccion
+    });
+
+   
+    // CAMPOS QUE NO SE PUEDEN EDITAR
+ 
+
+    this.form.get('numeroDocumento')?.disable();
+    this.form.get('tipoDocumento')?.disable();
+    this.form.get('nombre')?.disable();
+    this.form.get('apellido')?.disable();
+    this.form.get('fechaNacimiento')?.disable();
+    this.form.get('genero')?.disable();
+
+  
+    // CAMPOS QUE SÍ SE PUEDEN EDITAR
+  
+
+    this.form.get('email')?.enable();
+    this.form.get('telefono')?.enable();
+    this.form.get('direccion')?.enable();
+  }
+
+
+  // CANCELAR
+
+
+  cancelarEdicion(): void {
+
+    this.ciudadanoEnEdicion.set(null);
+
+    this.form.reset();
+
+    // Volver a habilitar todos los campos
+    this.form.enable();
+  }
+
+
+  // GUARDAR / ACTUALIZAR
+ 
+
+  guardar(): void {
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
-    this.personalSaludService.registrarCiudadano(
-      this.form.value as Partial<Ciudadano>
-    ).subscribe({
-      next: () => {
-        this.form.reset();
-        this.mostrarFormulario.set(false);
-        this.cargarCiudadanos();
-      },
-      error: error => {
-        console.error('Error al registrar ciudadano', error);
-      }
-    });
+
+    const ciudadanoEditando =
+      this.ciudadanoEnEdicion();
+
+  
+    // ACTUALIZAR CIUDADANO
+   
+
+    if (ciudadanoEditando) {
+
+      // SOLO se envían estos tres campos
+      const cambios = {
+        email: this.form.get('email')?.value,
+        telefono: this.form.get('telefono')?.value,
+        direccion: this.form.get('direccion')?.value
+      };
+
+      this.personalSaludService
+        .actualizarCiudadano(
+          ciudadanoEditando.id,
+          cambios
+        )
+        .subscribe({
+
+          next: () => {
+
+            console.log(
+              'Ciudadano actualizado correctamente'
+            );
+
+            this.cancelarEdicion();
+
+            this.mostrarFormulario.set(false);
+
+            this.cargarCiudadanos();
+          },
+
+          error: error => {
+
+            console.error(
+              'Error al actualizar ciudadano:',
+              error
+            );
+
+          }
+        });
+
+      return;
+    }
+
+  
+  // REGISTRAR CIUDADANO
+   
+
+    const datos =
+      this.form.getRawValue() as Partial<Ciudadano>;
+
+    this.personalSaludService
+      .registrarCiudadano(datos)
+      .subscribe({
+
+        next: () => {
+
+          this.form.reset();
+
+          this.mostrarFormulario.set(false);
+
+          this.cargarCiudadanos();
+        },
+
+        error: error => {
+
+          console.error(
+            'Error al registrar ciudadano:',
+            error
+          );
+
+        }
+      });
   }
 }
