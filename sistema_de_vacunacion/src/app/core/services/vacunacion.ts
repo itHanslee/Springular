@@ -2,8 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import {Vacunacion as VacunacionModel,VacunaPendiente,} from '../../shared/models/vacunacion.model';
-import { RegistrarVacunacionRequest } from '../../shared/models/registrar-vacunacion-request.model';
+import {
+  Vacunacion as VacunacionModel,
+  VacunaPendiente,
+  
+} from '../../shared/models/vacunacion.model';
+import {RegistrarVacunacionRequest} from '../../shared/models/registrar-vacunacion-request.model'
 import { API } from '../../../environments/environment';
 
 export interface FiltrosReporte {
@@ -18,11 +22,12 @@ export interface FiltrosReporte {
 })
 export class VacunacionService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   registrarAplicacion(
     datos: RegistrarVacunacionRequest
   ): Observable<void> {
+
     return this.http.post<void>(
       API.VACUNACIONES.BASE,
       datos

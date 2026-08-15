@@ -1,8 +1,16 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
-import { VacunaService } from '../../../core/services/vacuna';
-import { Vacuna } from '../../../shared/models/vacuna.model';
-import { DatePipe } from '@angular/common';
+import {
+  Component,
+  OnInit,
+  signal,
+  computed,
+  DestroyRef
+} from '@angular/core';
 
+import { DatePipe } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { VacunaService } from '../../../core/services/vacuna';
+import { InventarioItem } from '../../../shared/models/inventario.model';
 
 @Component({
   selector: 'app-inventario',
@@ -11,42 +19,69 @@ import { DatePipe } from '@angular/common';
   templateUrl: './inventario.html',
   styleUrl: './inventario.css',
 })
-
 export class Inventario implements OnInit {
+
   terminoBusqueda = signal('');
-  vacunas = signal<Vacuna[]>([]);
+  inventario = signal<InventarioItem[]>([]);
   cargando = signal(false);
 
-  vacunasFiltradas = computed(() => {
-  const termino = this.terminoBusqueda().toLowerCase().trim();
-  if (!termino) return this.vacunas();
-  return this.vacunas().filter(v =>
-    v.nombre.toLowerCase().includes(termino) ||
-    v.numeroLote.toLowerCase().includes(termino)
-  );
-});
+  inventarioFiltrado = computed(() => {
 
-hayResultados = computed(() => this.vacunasFiltradas().length > 0);
+    const termino =
+      this.terminoBusqueda()
+        .toLowerCase()
+        .trim();
 
-constructor(private vacunaService: VacunaService) {}
+    if (!termino) {
+      return this.inventario();
+    }
 
-ngOnInit(): void {
-  this.cargarVacunas();
-}
-
-cargarVacunas(): void {
-  this.cargando.set(true);
-  this.vacunaService.listarVacunas().subscribe(data => {
-    this.vacunas.set(data);
-    this.cargando.set(false);
+    return this.inventario().filter(item =>
+      item.nombre.toLowerCase().includes(termino) ||
+      item.numeroLote.toLowerCase().includes(termino)
+    );
   });
+
+  hayResultados = computed(() =>
+    this.inventarioFiltrado().length > 0
+  );
+
+  constructor(
+    private vacunaService: VacunaService,
+    private destroyRef: DestroyRef
+  ) {}
+
+  ngOnInit(): void {
+    this.cargarInventario();
+  }
+
+  cargarInventario(): void {
+
+    this.cargando.set(true);
+
+    this.vacunaService
+      .listarInventario()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+        next: (data: InventarioItem[]) => {
+          this.inventario.set(data);
+          this.cargando.set(false);
+        },
+
+        error: (error: unknown) => {
+          console.error(
+            'Error al cargar inventario:',
+            error
+          );
+
+          this.cargando.set(false);
+        }
+      });
+  }
+
+  buscarVacunas(valor: string): void {
+    this.terminoBusqueda.set(valor);
+  }
 }
-
-buscarVacunas(valor: string): void {
-  this.terminoBusqueda.set(valor);
-}
-
-
-}
-
-
