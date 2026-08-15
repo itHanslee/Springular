@@ -24,7 +24,10 @@ export class PersonalSaludLayout {
   ];
 
   constructor(private authService: AuthService) {
-    
-    this.nombreUsuario = this.authService.usuarioActual()?.nombre ?? '';
+    const usuario = this.authService.usuarioActual();
+
+    this.nombreUsuario = usuario
+      ? `${usuario.nombre} ${usuario.apellido}`
+      : '';
   }
 }

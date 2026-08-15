@@ -25,6 +25,10 @@ menuItems: MenuItem[] = [
 ];
 
   constructor(private authService: AuthService) {
-   this.nombreUsuario = 'María Ortíz';
-  }
+  const usuario = this.authService.usuarioActual();
+
+  this.nombreUsuario = usuario
+    ? `${usuario.nombre} ${usuario.apellido}`
+    : '';
+}
 }

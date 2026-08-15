@@ -1,6 +1,7 @@
 // shared/components/app-header/app-header.ts
 import { Component, Input } from '@angular/core';
-
+import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -9,4 +10,20 @@ import { Component, Input } from '@angular/core';
 })
 export class AppHeader {
   @Input({ required: true }) nombreUsuario = '';
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  cerrarSesion(): void {
+    const confirmar = window.confirm('¿Deseas cerrar sesión?');
+
+    if (!confirmar) {
+      return;
+    }
+
+    this.authService.cerrarSesion();
+    this.router.navigate(['/']);
+  }
 }

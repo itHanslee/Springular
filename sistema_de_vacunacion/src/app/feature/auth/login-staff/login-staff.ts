@@ -52,10 +52,21 @@ export class LoginStaffComponent {
       next: (respuesta) => {
         console.log('RESPUESTA LOGIN:', respuesta);
         console.log('ROL RECIBIDO:', respuesta.rol);
-        this.cargando.set(false);
-        const rol = respuesta.rol;
-        const destino = respuesta.rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
-        this.router.navigate([destino]);
+
+        this.authService.cargarUsuarioActual().subscribe({
+          next: () => {
+            this.cargando.set(false);
+            const rol = respuesta.rol;
+            const destino = rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
+            this.router.navigate([destino]);
+          },
+          error: () => {
+            this.cargando.set(false);
+            const rol = respuesta.rol;
+            const destino = rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
+            this.router.navigate([destino]);
+          }
+        });
       },
       error: (error: HttpErrorResponse) => {
         this.cargando.set(false);

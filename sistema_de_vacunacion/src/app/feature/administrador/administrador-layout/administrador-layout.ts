@@ -22,7 +22,10 @@ export class AdministradorLayout {
   ];
 
   constructor(private authService: AuthService) {
-    // 👇 se asigna DENTRO del constructor, cuando authService ya existe
-    this.nombreUsuario = this.authService.usuarioActual()?.nombre ?? '';
+   const usuario = this.authService.usuarioActual();
+
+    this.nombreUsuario = usuario
+      ? `${usuario.nombre} ${usuario.apellido}`
+      : '';
   }
 }

@@ -93,8 +93,16 @@ export class LoginCiudadanoComponent {
  
     this.authService.loginCiudadano(request).subscribe({
       next: () => {
-        this.cargando.set(false);
-        this.router.navigate(['/ciudadano']);
+        this.authService.cargarUsuarioActual().subscribe({
+          next: () => {
+            this.cargando.set(false);
+            this.router.navigate(['/ciudadano']);
+          },
+          error: () => {
+            this.cargando.set(false);
+            this.router.navigate(['/ciudadano']);
+          }
+        });
       },
       error: (error: HttpErrorResponse) => {
         this.cargando.set(false);
