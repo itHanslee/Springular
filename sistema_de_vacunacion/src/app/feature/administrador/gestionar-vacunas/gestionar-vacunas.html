@@ -68,6 +68,7 @@
     <table class="tabla">
       <thead>
         <tr>
+          <th>Código</th>
           <th>Vacuna</th>
           <th>Fabricante</th>
           <th>Vía de administración</th>
@@ -79,6 +80,7 @@
       <tbody>
         @for (vacuna of vacunasFiltradas(); track vacuna.id) {
           <tr>
+            <td>{{ vacuna.codigo }}</td>
             <td>{{ vacuna.nombre }}</td>
             <td>{{ vacuna.fabricante }}</td>
             <td>{{ vacuna.viaAdministracion }}</td>

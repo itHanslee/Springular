@@ -18,7 +18,7 @@ export class GestionarVacunas implements OnInit {
   mostrarFormulario = signal(false);
   vacunaEnEdicion = signal<Vacuna | null>(null);
 
-  opcionesViaAdministracion: viaAdministracion[] = ['oral', 'intramuscular', 'subcutanea', 'intradermica'];
+  opcionesViaAdministracion: viaAdministracion[] = ['Oral', 'Intramuscular', 'Subcutanea', 'Intradermica'];
 
   vacunasFiltradas = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase().trim();

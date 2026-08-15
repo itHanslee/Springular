@@ -94,7 +94,7 @@ export class LoginCiudadanoComponent {
     this.authService.loginCiudadano(request).subscribe({
       next: () => {
         this.cargando.set(false);
-        this.router.navigate(['/ciudadano/historial']);
+        this.router.navigate(['/ciudadano']);
       },
       error: (error: HttpErrorResponse) => {
         this.cargando.set(false);

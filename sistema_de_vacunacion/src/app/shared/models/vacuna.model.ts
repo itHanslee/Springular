@@ -1,4 +1,4 @@
-export type viaAdministracion = "oral" | "intramuscular" | "subcutanea" | "intradermica";
+export type viaAdministracion = "Oral" | "Intramuscular" | "Subcutanea" | "Intradermica";
 export type estadoVacuna = "Activa" | "Inactiva";
 
 export interface Vacuna {
