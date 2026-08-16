@@ -29,7 +29,8 @@ export class AuthService {
 
     const request = {
       usuario: data.numeroDocumento,
-      contrasena: data.ultimosDigitos
+      contrasena: data.ultimosDigitos,
+      tipoDocumento: data.tipoDocumento
     };
 
     return this.http.post<LoginResponse>(
