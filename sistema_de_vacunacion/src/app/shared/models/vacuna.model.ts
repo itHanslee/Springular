@@ -1,19 +1,23 @@
 export type viaAdministracion = "Oral" | "Intramuscular" | "Subcutanea" | "Intradermica";
-export type estadoVacuna = "Activa" | "Inactiva";
+export type estadoVacuna = "ACTIVA" | "INACTIVA";
 
 export interface Vacuna {
-    id: number;
-    codigo: string;
-    nombre: string;
-    numeroLote: string;
-    fabricante: string;
-    dosisTotales: number;
-    viaAdministracion: viaAdministracion;
-    temperaturaAlmacenamiento: number;
-    stock: number;
-    estado: estadoVacuna;
-    fechaVencimiento: Date;
-    idCiudadano: number;
-    idInventario: number | null;
-    fechaProgramada: string;
+  id: number;
+  codigo: string;
+  nombre: string;
+  fabricante: string;
+  dosisTotales: number;
+  viaAdministracion: viaAdministracion;
+  temperaturaAlmacenamiento: number;
+  estado: estadoVacuna;
+}
+
+export interface InventarioLote {
+  id?: number;
+  numeroLote: string;
+  cantidadRecibida: number;
+  stockActual: number;
+  fechaVencimiento: string;
+  activo: boolean;
+  idVacuna: number;
 }

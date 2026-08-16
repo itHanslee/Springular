@@ -58,6 +58,9 @@ export const API = {
     LOTES_POR_VACUNA: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunas/${id}/lotes`,
 
+    LOTES_TODOS: (id: number) =>
+    `${API_BASE_URL.apiUrl}/api/vacunas/${id}/lotes/todos`,
+
     ESQUEMAS: (id: number) =>
       `${API_BASE_URL.apiUrl}/api/vacunas/${id}/esquemas`,
 

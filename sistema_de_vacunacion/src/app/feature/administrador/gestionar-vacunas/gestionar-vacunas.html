@@ -56,6 +56,21 @@
         <input formControlName="temperaturaAlmacenamiento" type="number" />
       </div>
 
+      <div class="campo">
+        <label>Lote</label>
+        <input formControlName="numeroLote" placeholder="Ej. LOTE-001" [readonly]="vacunaEnEdicion() !== null"/>
+      </div>
+
+      <div class="campo">
+        <label>Fecha de vencimiento</label>
+        <input formControlName="fechaVencimiento" type="date" [readonly]="vacunaEnEdicion() !== null"/>
+      </div>
+
+      <div class="campo">
+        <label>Cantidad que entra</label>
+        <input formControlName="cantidadRecibida" type="number" min="1" placeholder="Ej. 100" [readonly]="vacunaEnEdicion() !== null"/>
+      </div>      
+
       <button type="submit" class="btn-guardar" [disabled]="form.invalid">
         {{ vacunaEnEdicion() ? 'Actualizar' : 'Guardar' }}
       </button>
@@ -73,19 +88,26 @@
           <th>Fabricante</th>
           <th>Vía de administración</th>
           <th>N° dosis</th>
+          <th>Lote</th>
+          <th>Cantidad</th>
+          <th>Vencimiento</th>
           <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (vacuna of vacunasFiltradas(); track vacuna.id) {
+          @let lote = getLoteActual(vacuna.id);
           <tr>
             <td>{{ vacuna.codigo }}</td>
             <td>{{ vacuna.nombre }}</td>
             <td>{{ vacuna.fabricante }}</td>
             <td>{{ vacuna.viaAdministracion }}</td>
             <td>{{ vacuna.dosisTotales }}</td>
-            <td>{{ vacuna.estado === 'Activa' ? 'Activo' : 'Inactivo' }}</td>
+            <td>{{ lote?.numeroLote || '—' }}</td>
+            <td>{{ lote?.stockActual ?? 0 }}</td>
+            <td>{{ lote?.fechaVencimiento || '—' }}</td>
+            <td>{{ vacuna.estado === 'ACTIVA' ? 'Activo' : 'Inactivo' }}</td>
             <td>
               <button class="btn-editar" (click)="editar(vacuna)" title="Editar vacuna">
                 <i class="bi bi-pencil-square"></i>
