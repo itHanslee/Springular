@@ -1,40 +1,50 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
 import { Recordatorio } from '../../shared/models/recordatorios.model';
+import { API } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecordatorioService {
 
- private readonly baseUrl = 'http://localhost:8080/api/recordatorios';
-
   constructor(private http: HttpClient) {}
 
   listarTodos(): Observable<Recordatorio[]> {
-    return this.http.get<Recordatorio[]>(this.baseUrl);
-  }
-
-  listarPorDocumento(documento: string): Observable<Recordatorio[]> {
     return this.http.get<Recordatorio[]>(
-      `${this.baseUrl}/documento/${encodeURIComponent(documento)}`
+      API.RECORDATORIOS.BASE
     );
   }
 
   obtenerPorId(id: number): Observable<Recordatorio> {
-    return this.http.get<Recordatorio>(`${this.baseUrl}/${id}`);
+    return this.http.get<Recordatorio>(
+      API.RECORDATORIOS.POR_ID(id)
+    );
   }
 
-  crear(recordatorio: Partial<Recordatorio>): Observable<Recordatorio> {
-    return this.http.post<Recordatorio>(this.baseUrl, recordatorio);
+  listarPorEstado(
+    estado: string
+  ): Observable<Recordatorio[]> {
+    return this.http.get<Recordatorio[]>(
+      API.RECORDATORIOS.POR_ESTADO(estado)
+    );
   }
 
-  actualizar(id: number, cambios: Partial<Recordatorio>): Observable<Recordatorio> {
-    return this.http.put<Recordatorio>(`${this.baseUrl}/${id}`, cambios);
+  marcarComoEnviado(id: number): Observable<void> {
+    return this.http.patch<void>(
+      API.RECORDATORIOS.ENVIADO(id),
+      {}
+    );
   }
 
-  eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  generarRecordatorios(
+    idCiudadano: number
+  ): Observable<Recordatorio[]> {
+    return this.http.post<Recordatorio[]>(
+      `${API.RECORDATORIOS.BASE}/generar/${idCiudadano}`,
+      {}
+    );
   }
 }

@@ -1,7 +1,15 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  signal,
+  computed
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
 import { RecordatorioService } from '../../../core/services/recordatorios';
 import { Recordatorio } from '../../../shared/models/recordatorios.model';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-recordatorios',
@@ -11,76 +19,152 @@ import { Recordatorio } from '../../../shared/models/recordatorios.model';
   styleUrls: ['./recordatorios.css']
 })
 export class Recordatorios implements OnInit {
-  recordatorios = signal<Recordatorio[]>([])
-  cargando = signal(true)
-  terminoBusqueda = signal('')
-  mostrarEnSistema = signal(true)
+
+  recordatorios = signal<Recordatorio[]>([]);
+
+  cargando = signal(true);
+
+  terminoBusqueda = signal('');
+
+  mostrarEnSistema = signal(true);
 
   recordatoriosFiltrados = computed(() => {
-    const termino = this.terminoBusqueda().toLowerCase().trim()
-    let resultado = this.recordatorios()
+
+    const termino =
+      this.terminoBusqueda()
+        .toLowerCase()
+        .trim();
 
     if (!this.mostrarEnSistema()) {
-      return []
+      return [];
     }
+
+    let resultado = this.recordatorios();
 
     if (termino) {
-      resultado = resultado.filter(r =>
-        r.mensaje.toLowerCase().includes(termino)
-      )
+      resultado = resultado.filter(recordatorio =>
+        recordatorio.vacunaNombre
+          ?.toLowerCase()
+          .includes(termino)
+      );
     }
 
-    return resultado
-  })
+    return resultado;
+  });
 
-  hayResultados = computed(() => this.recordatoriosFiltrados().length > 0)
+  hayResultados = computed(() =>
+    this.recordatoriosFiltrados().length > 0
+  );
 
-  constructor(private recordatorioService: RecordatorioService) {}
+  constructor(
+    private recordatorioService: RecordatorioService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.cargarRecordatorios()
+    this.cargarRecordatorios();
   }
 
-cargarRecordatorios(): void {
-  this.cargando.set(true);
+  cargarRecordatorios(): void {
 
-  this.recordatorioService.listarTodos().subscribe({
-    next: (data: Recordatorio[]) => {
-      console.log('🔥 DATOS DEL BACKEND =>', data);
+    this.cargando.set(true);
 
-      const convertidos = data.map(r => ({
-        ...r,
-        fechaProgramada: new Date(r.fechaProgramada),
-        fechaEnvio: r.fechaEnvio ? new Date(r.fechaEnvio) : undefined
-      }));
+    const usuario = this.authService.usuarioActual();
 
-      console.log('✅ DATOS CONVERTIDOS =>', convertidos);
+    if (!usuario || !usuario.id) {
 
-      this.recordatorios.set(convertidos);
+      console.error('❌ No hay ciudadano autenticado');
+
+      this.recordatorios.set([]);
       this.cargando.set(false);
-    },
-    error: (err: unknown) => {
-      console.error('❌ Error cargando recordatorios', err);
-      this.cargando.set(false);
+
+      return;
     }
-  });
-}
+
+    const idCiudadano = usuario.id;
+
+    console.log('👤 ID CIUDADANO:', idCiudadano);
+
+    this.recordatorioService
+      .listarTodos()
+      .subscribe({
+
+        next: (data) => {
+
+         console.log(
+      '🔥 TODOS LOS RECORDATORIOS:',
+        JSON.stringify(data, null, 2)
+  );
+
+          const delCiudadano =
+            data.filter(
+              r => r.idCiudadano === idCiudadano
+            );
+
+          console.log(
+            '👤 RECORDATORIOS DEL CIUDADANO:',
+            delCiudadano
+          );
+
+          const convertidos: Recordatorio[] =
+            delCiudadano.map(r => ({
+
+              ...r,
+
+              fechaProgramada:
+                new Date(r.fechaProgramada),
+
+              fechaEnvio:
+                r.fechaEnvio
+                  ? new Date(r.fechaEnvio)
+                  : null
+
+            }));
+
+          this.recordatorios.set(convertidos);
+
+          this.cargando.set(false);
+        },
+
+        error: (error) => {
+
+          console.error(
+            '❌ Error obteniendo recordatorios:',
+            error
+          );
+
+          this.recordatorios.set([]);
+
+          this.cargando.set(false);
+        }
+
+      });
+  }
 
   buscar(valor: string): void {
-    this.terminoBusqueda.set(valor)
+    this.terminoBusqueda.set(valor);
   }
 
   cambiarPreferencia(valor: boolean): void {
-    this.mostrarEnSistema.set(valor)
+    this.mostrarEnSistema.set(valor);
   }
 
-  formatearFecha(fecha: string | Date): string {
-  const fechaObj = fecha instanceof Date ? fecha : new Date(fecha);
+  formatearFecha(
+    fecha: string | Date
+  ): string {
 
-  return fechaObj.toLocaleDateString('es-CO', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-}
+    const fechaObj =
+      fecha instanceof Date
+        ? fecha
+        : new Date(fecha);
+
+    return fechaObj.toLocaleDateString(
+      'es-CO',
+      {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }
+    );
+  }
 }
