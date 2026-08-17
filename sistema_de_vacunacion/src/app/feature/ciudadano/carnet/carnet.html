@@ -23,9 +23,12 @@
 
     </div>
 
-    <button class="btn-descargar">
+    <button class="btn-descargar" type ="button" (click)="descargarCarnet()" [disabled]="descargando()">
       <i class="bi bi-download"></i>
-      Descargar
+      {{ descargando()
+          ? 'Generando...'
+          : 'Descargar'
+      }}
     </button>
 
   }
