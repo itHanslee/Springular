@@ -28,10 +28,10 @@
 
     @if (historial().length > 0) {
     <ul class="lista-historial">
-      @for (item of historial(); track item.id) {
+      @for (item of historial(); track item.idVacunacion) {
         <li class="resultado-item">
           <span class="fecha">{{ item.fechaAplicacion | date:'dd/MM/yyyy' }} —</span>
-          <span class="detalle">{{ item.vacunaNombre }}, {{ item.dosis }}, aplicado por {{ item.aplicadoPor }}</span>
+          <span class="detalle">{{ item.vacuna }}, {{ item.dosis }}, aplicado por {{ item.aplicadoPor }}</span>
         </li>
       }
     </ul>
