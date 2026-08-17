@@ -1,17 +1,6 @@
-import {
-  Component,
-  OnInit,
-  signal,
-  computed,
-  DestroyRef
-} from '@angular/core';
+import { Component, signal, DestroyRef } from '@angular/core';
 
-import {
-  ReactiveFormsModule,
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -28,13 +17,12 @@ import { Ciudadano } from '../../../shared/models/ciudadano.model';
   templateUrl: './registrar-vacunacion.html',
   styleUrl: './registrar-vacunacion.css'
 })
-export class RegistrarVacunacion implements OnInit {
+export class RegistrarVacunacion {
 
   documentoBusqueda = signal('');
   buscando = signal(false);
   registrando = signal(false);
 
-  ciudadanos = signal<Ciudadano[]>([]);
   ciudadanoSeleccionado = signal<Ciudadano | null>(null);
 
   pendientes = signal<VacunaPendiente[]>([]);
@@ -45,22 +33,6 @@ export class RegistrarVacunacion implements OnInit {
 
   form: FormGroup;
 
-  ciudadanosFiltrados = computed(() => {
-
-    const termino = this.documentoBusqueda()
-      .trim()
-      .toLowerCase();
-
-    if (!termino) {
-      return this.ciudadanos();
-    }
-
-    return this.ciudadanos().filter(ciudadano =>
-      ciudadano.numeroDocumento
-        .toLowerCase()
-        .includes(termino)
-    );
-  });
 
   constructor(
     private vacunacionService: VacunacionService,
@@ -81,47 +53,6 @@ export class RegistrarVacunacion implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.cargarCiudadanos();
-  }
-
-  /**
-   * Carga todos los ciudadanos al entrar a la pantalla.
-   */
-  cargarCiudadanos(): void {
-
-    this.buscando.set(true);
-    this.mensajeError.set(null);
-
-    this.personalSaludService
-      .listar()
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
-      .subscribe({
-
-        next: ciudadanos => {
-
-          this.ciudadanos.set(ciudadanos);
-          this.buscando.set(false);
-        },
-
-        error: (error: HttpErrorResponse) => {
-
-          this.buscando.set(false);
-
-          console.error(
-            'Error al cargar ciudadanos:',
-            error
-          );
-
-          this.mensajeError.set(
-            error.error?.message ??
-            'No se pudieron cargar los ciudadanos.'
-          );
-        }
-      });
-  }
 
   /**
    * Actualiza el texto utilizado por el filtro.
@@ -147,28 +78,54 @@ export class RegistrarVacunacion implements OnInit {
    */
   buscar(): void {
 
-    const documento =
-      this.documentoBusqueda().trim();
+    const documento = this.documentoBusqueda().trim();
 
     if (!documento) {
-
       this.mensajeError.set(
         'Ingrese un número de documento.'
       );
-
       return;
     }
 
-    if (this.ciudadanosFiltrados().length === 0) {
-
-      this.mensajeError.set(
-        'No se encontró ningún ciudadano con ese documento.'
-      );
-
-      return;
-    }
-
+    this.buscando.set(true);
     this.mensajeError.set(null);
+    this.mensajeExito.set(null);
+
+    this.ciudadanoSeleccionado.set(null);
+    this.pendientes.set([]);
+    this.pendienteSeleccionada.set(null);
+
+    this.personalSaludService
+      .obtenerCiudadanoPorDocumento(documento)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe({
+
+        next: ciudadano => {
+
+          this.buscando.set(false);
+
+          this.seleccionarCiudadano(ciudadano);
+        },
+
+        error: (error: HttpErrorResponse) => {
+
+          this.buscando.set(false);
+
+          console.error(
+            'Error al buscar ciudadano:',
+            error
+          );
+
+          this.mensajeError.set(
+            error.status === 404
+              ? 'No se encontró ningún ciudadano con ese documento.'
+              : error.error?.message ??
+              'No se pudo consultar el ciudadano.'
+          );
+        }
+      });
   }
 
   /**
@@ -225,6 +182,7 @@ export class RegistrarVacunacion implements OnInit {
         }
       });
   }
+
 
   /**
    * Selecciona la dosis que se va a aplicar.

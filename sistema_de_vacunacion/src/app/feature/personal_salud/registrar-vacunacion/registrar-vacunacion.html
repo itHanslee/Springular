@@ -1,59 +1,211 @@
 <section class="registrar-vacunacion">
   <h1>Registrar vacunación</h1>
-  <p class="subtitulo">Registro y consulta de información de ciudadanos</p>
+  <p class="subtitulo">
+    Registro y consulta de información de ciudadanos
+  </p>
 
+  <!-- BUSCADOR -->
   <div class="toolbar">
     <div class="campo-busqueda">
-      <input type="text" placeholder="Documento del ciudadano" [value]="documentoBusqueda()"
-        (input)="onDocumentoChange($any($event.target).value)" (keyup.enter)="buscar()" />
+      <input
+        type="text"
+        placeholder="Documento del ciudadano"
+        [value]="documentoBusqueda()"
+        (input)="onDocumentoChange($any($event.target).value)"
+        (keyup.enter)="buscar()"
+      />
     </div>
-    <button class="btn-primario" type="button" (click)="buscar()" [disabled]="buscando()">
-      <i class="bi bi-search"></i> {{ buscando() ? 'Buscando...' : 'Buscar' }}
+
+    <button
+      class="btn-primario"
+      type="button"
+      (click)="buscar()"
+      [disabled]="buscando()"
+    >
+      <i class="bi bi-search"></i>
+      {{ buscando() ? 'Buscando...' : 'Buscar' }}
     </button>
   </div>
 
+  <!-- MENSAJES -->
   @if (mensajeError()) {
-  <p class="mensaje-error">{{ mensajeError() }}</p>
+    <p class="mensaje-error">{{ mensajeError() }}</p>
   }
 
   @if (mensajeExito()) {
-  <p class="mensaje-exito">{{ mensajeExito() }}</p>
+    <p class="mensaje-exito">{{ mensajeExito() }}</p>
   }
 
-  @if (pendienteSeleccionada(); as p) {
-  <div class="resultado-ciudadano">
-    {{ p.nombreCiudadano }} · {{ p.documentoCiudadano }} · Pendiente: {{ p.descripcion }}
-  </div>
 
-  <form [formGroup]="form" (ngSubmit)="registrar()" class="form-vacunacion">
-    <div class="fila">
-      <div class="campo">
-        <label>Vacuna a aplicar</label>
-        <input [value]="p.vacunaNombre" readonly class="campo-solo-lectura" />
+  <!-- CIUDADANO ENCONTRADO -->
+  @if (ciudadanoSeleccionado(); as ciudadano) {
+
+    <div class="resultado-ciudadano">
+
+      <div class="datos-ciudadano">
+        <div>
+          <span class="etiqueta">Nombre</span>
+          <strong>
+            {{ ciudadano.nombre }}
+            {{ ciudadano.apellido }}
+          </strong>
+        </div>
+
+        <div>
+          <span class="etiqueta">Documento</span>
+          <strong>
+            {{ ciudadano.numeroDocumento }}
+          </strong>
+        </div>
       </div>
-      <div class="campo">
-        <label>Lote</label>
-        <input [value]="p.numeroLote" readonly class="campo-solo-lectura" />
-      </div>
+
     </div>
 
-    <div class="fila">
-      <div class="campo">
-        <label>Dosis N°</label>
-        <input [value]="p.dosis" readonly class="campo-solo-lectura" />
-      </div>
-      <div class="campo">
-        <label>Fecha de aplicación</label>
-        <input formControlName="fechaAplicacion" type="date" />
-        @if (form.get('fechaAplicacion')?.invalid && form.get('fechaAplicacion')?.touched) {
-        <span class="error">Selecciona una fecha</span>
-        }
-      </div>
-    </div>
 
-    <button type="submit" class="btn-guardar" [disabled]="form.invalid || registrando()">
-      {{ registrando() ? 'Registrando...' : 'Registrar aplicación' }}
-    </button>
-  </form>
+    <!-- VACUNAS PENDIENTES -->
+    @if (pendientes().length > 0) {
+
+      <div class="pendientes">
+
+        <h2>Vacunas pendientes</h2>
+
+        <div class="lista-pendientes">
+
+          @for (pendiente of pendientes(); track pendiente.idInventario) {
+
+            <label
+              class="pendiente-item"
+              [class.seleccionada]="pendienteSeleccionada() === pendiente"
+            >
+
+              <input
+                type="radio"
+                name="vacunaPendiente"
+                [checked]="pendienteSeleccionada() === pendiente"
+                (change)="seleccionarPendiente(pendiente)"
+              />
+
+              <div class="pendiente-info">
+
+                <strong>
+                  {{ pendiente.vacunaNombre }}
+                </strong>
+
+                <span>
+                  {{ pendiente.dosis }}
+                </span>
+
+                <small>
+                  {{ pendiente.descripcion }}
+                </small>
+
+                @if (pendiente.fechaProgramada) {
+                  <small>
+                    Fecha programada:
+                    {{ pendiente.fechaProgramada }}
+                  </small>
+                }
+
+              </div>
+
+            </label>
+
+          }
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- FORMULARIO DE VACUNACIÓN -->
+    @if (pendienteSeleccionada(); as p) {
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="registrar()"
+        class="form-vacunacion"
+      >
+
+        <h2>Registrar aplicación</h2>
+
+        <div class="fila">
+
+          <div class="campo">
+            <label>Vacuna a aplicar</label>
+
+            <input
+              [value]="p.vacunaNombre"
+              readonly
+              class="campo-solo-lectura"
+            />
+          </div>
+
+          <div class="campo">
+            <label>Lote</label>
+
+            <input
+              [value]="p.numeroLote"
+              readonly
+              class="campo-solo-lectura"
+            />
+          </div>
+
+        </div>
+
+
+        <div class="fila">
+
+          <div class="campo">
+            <label>Dosis N°</label>
+
+            <input
+              [value]="p.dosis"
+              readonly
+              class="campo-solo-lectura"
+            />
+          </div>
+
+
+          <div class="campo">
+            <label>Fecha de aplicación</label>
+
+            <input
+              formControlName="fechaAplicacion"
+              type="date"
+            />
+
+            @if (
+              form.get('fechaAplicacion')?.invalid &&
+              form.get('fechaAplicacion')?.touched
+            ) {
+              <span class="error">
+                Selecciona una fecha
+              </span>
+            }
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="btn-guardar"
+          [disabled]="form.invalid || registrando()"
+        >
+          {{
+            registrando()
+              ? 'Registrando...'
+              : 'Registrar aplicación'
+          }}
+        </button>
+
+      </form>
+
+    }
+
   }
+
 </section>
