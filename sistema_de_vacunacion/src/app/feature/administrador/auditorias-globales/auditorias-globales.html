@@ -7,16 +7,22 @@
     <div class="campo-busqueda">
   <input
     type="text"
-    placeholder="Buscar usuario"
+    placeholder="Buscar usuario o entidad"
     (input)="buscar($any($event.target).value)"
   />
   <span ><i class="bi bi-search"></i></span>
-</div>
 
+</div>
     <select class="filtro-tipo" (change)="filtrarPorTipo($any($event.target).value)">
       <option value="">Todas las acciones</option>
       @for (opcion of opcionesTipoAuditoria; track opcion) {
-        <option [value]="opcion">{{ opcion }}</option>
+        <option [value]="opcion"> {{ formatearAccion(opcion) }}</option>
+      }
+    </select>
+    <select class="filtro-tipo" (change)="filtrarPorTabla($any($event.target).value)">
+      <option value="">Todas las entidades</option>
+      @for (tabla of opcionesTabla(); track tabla) {
+        <option [value]="tabla">{{ formatearTabla(tabla) }}</option>
       }
     </select>
   </div>
@@ -31,15 +37,42 @@
           <th>Usuario</th>
           <th>Acción</th>
           <th>Entidad afectada</th>
+          <th>Detalles</th>
         </tr>
       </thead>
       <tbody>
-        @for (auditoria of auditoriasFiltradas(); track auditoria.id) {
+        @for (auditoria of auditoriasFiltradas(); track auditoria.idAuditoria) {
           <tr>
-            <td>{{ formatearFecha(auditoria.fechaAuditoria) }}</td>
-            <td>{{ auditoria.usuario.nombre }} {{ auditoria.usuario.apellido }}</td>
-            <td>{{ auditoria.tipoAuditoria }}</td>
-            <td>{{ auditoria.descripcion }}</td>
+            <td>{{ formatearFecha(auditoria.fechaAccion) }}</td>
+            <td>{{ auditoria.nombreUsuario }} {{ auditoria.apellidoUsuario}}</td>
+            <td>
+              <span class="accion" [class.crear]= "auditoria.tipoAccion === 'CREAR' " [class.editar]= "auditoria.tipoAccion === 'EDITAR' " [class.eliminar]= "auditoria.tipoAccion === 'ELIMINAR' " [class.consultar]= "auditoria.tipoAccion === 'CONSULTAR' ">
+                  {{formatearAccion(auditoria.tipoAccion)}}
+              </span>
+            </td>
+            <td>{{formatearTabla(auditoria.tablaAfectada)}}</td>
+            <td>
+              @if (auditoria.datosAnteriores || auditoria.datosNuevos) {
+                    <details class="detalles">
+                      <summary> Ver cambios</summary>
+                      @if (auditoria.datosAnteriores) {
+                        <div class="cambio">
+                          <strong>Datos anteriores</strong>
+                          <pre>{{auditoria.datosAnteriores}}</pre>
+                        </div>
+                      }
+
+                      @if (auditoria.datosNuevos) {
+                        <div class="cambio">
+                          <strong>Datos nuevos</strong>
+                          <pre>{{auditoria.datosNuevos}}</pre>
+                        </div>
+                      }
+                    </details>
+                  }@else {
+                    <span class="sin-detalles">Sin detalles</span>
+                  }
+            </td>
           </tr>
         }
       </tbody>
