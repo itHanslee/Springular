@@ -4,39 +4,37 @@
     <p class="subtitulo">Historial de dosis recibidas</p>
   </div>
 
-  <div class="tabla-contenedor">
-    <table class="tabla-vacunas">
-      <thead>
-        <tr>
-          <th>Vacuna</th>
-          <th>Fecha</th>
-          <th>N° Dosis</th>
-          <th>Lote</th>
-        </tr>
-      </thead>
+  @if (cargando()) {
+    <p class="mensaje">Cargando vacunas aplicadas...</p>
+  }
+  @else if (hayResultados()) {
+    <div class="tabla-contenedor">
+      <table class="tabla-vacunas">
+        <thead>
+          <tr>
+            <th>Vacuna</th>
+            <th>Fecha</th>
+            <th>N° Dosis</th>
+            <th>Lote</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <tr>
-          <td>COVID-19 (refuerzo)</td>
-          <td>12/05/26</td>
-          <td>3</td>
-          <td>CV-2026-004</td>
-        </tr>
-
-        <tr>
-          <td>Influenza</td>
-          <td>20/01/25</td>
-          <td>1</td>
-          <td>INF-2025-002</td>
-        </tr>
-
-        <tr>
-          <td>Triple viral</td>
-          <td>03/06/20</td>
-          <td>2</td>
-          <td>TV-2020-014</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+        <tbody>
+          @for (vacunacion of vacunasFiltradas(); track vacunacion.idVacunacion) {
+            <tr>
+              <td>{{ vacunacion.vacuna }}</td>
+              <td>{{ vacunacion.fechaAplicacion | date:'dd/MM/yy' }}</td>
+              <td>{{ vacunacion.dosis }}</td>
+              <td>{{ vacunacion.numeroLote ?? '-' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @else {
+    <p class="mensaje">
+      No tienes vacunas aplicadas registradas.
+    </p>
+  }
 </section>

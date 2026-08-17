@@ -12,14 +12,13 @@ export interface VacunaPendiente {
   fechaProgramada: string;
 }
 
-
-
 export interface Vacunacion {
-  id: number;
-  vacunaNombre: string;
-  numeroLote: string;
-  fechaAplicacion: Date;
+  idVacunacion: number;
+  vacuna: string;
+  numeroLote: string | null;
   dosis: NumeroDosis;
-  ciudadanoDocumento: string;
+  fechaAplicacion: string;
   aplicadoPor: string;
+  observaciones?: string;
+  reaccionesAdversas?: boolean;
 }

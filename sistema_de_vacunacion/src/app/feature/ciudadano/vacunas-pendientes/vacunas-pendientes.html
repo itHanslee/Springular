@@ -4,17 +4,32 @@
     Calculadas según el esquema de vacunación
   </p>
 
-  <div class="lista-pendientes">
-
-    <div class="pendiente-card pendiente-card--proxima">
-      <span class="vacuna">Refuerzo influenza</span>
-      <span class="estado">Próxima</span>
+  @if (cargando()) {
+    <p class="mensaje">Cargando vacunas pendientes...</p>
+  }
+  @else if (hayResultados()) {
+    <div class="lista-pendientes">
+      @for (vacuna of vacunasFiltradas(); track vacuna.vacunaNombre + vacuna.dosis) {
+        <div
+          class="pendiente-card"
+          [class.pendiente-card--proxima]="esProxima(vacuna.fechaProgramada)"
+        >
+          <span class="vacuna">
+            {{ vacuna.vacunaNombre }}
+          </span>
+          <span
+            class="estado"
+            [class.estado-gris]="!esProxima(vacuna.fechaProgramada)"
+          >
+            {{ esProxima(vacuna.fechaProgramada) ? 'Próxima' : etiquetaTiempo(vacuna.fechaProgramada) }}
+          </span>
+        </div>
+      }
     </div>
-
-    <div class="pendiente-card">
-      <span class="vacuna">Refuerzo Tétanos</span>
-      <span class="estado estado-gris">En 4 meses</span>
-    </div>
-
-  </div>
+  }
+  @else {
+    <p class="mensaje">
+      No tienes vacunas pendientes.
+    </p>
+  }
 </section>
