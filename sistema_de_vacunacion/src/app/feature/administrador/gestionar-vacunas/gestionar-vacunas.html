@@ -5,11 +5,7 @@
 
   <div class="toolbar">
     <div class="campo-busqueda">
-      <input
-        type="text"
-        placeholder="Buscar vacuna"
-        (input)="buscar($any($event.target).value)"
-      />
+      <input type="text" placeholder="Buscar vacuna" (input)="buscar($any($event.target).value)" />
       <span class="icono-buscar"><i class="bi bi-search"></i></span>
     </div>
 
@@ -20,106 +16,112 @@
   </div>
 
   @if (mostrarFormulario()) {
-    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-nuevo">
-      <div class="campo">
-        <label>Código</label>
-        <input formControlName="codigo" placeholder="Ej. COV-19" />
-      </div>
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="form-nuevo">
+    @if (mensajeError()) {
+    <div class="alert-error">
+      {{ mensajeError() }}
+    </div>
+    }
+    <div class="campo">
+      <label>Código</label>
+      <input formControlName="codigo" placeholder="Ej. COV-19" />
+    </div>
 
-      <div class="campo">
-        <label>Nombre</label>
-        <input formControlName="nombre" placeholder="Ej. COVID-19" />
-      </div>
+    <div class="campo">
+      <label>Nombre</label>
+      <input formControlName="nombre" placeholder="Ej. COVID-19" />
+    </div>
 
-      <div class="campo">
-        <label>Fabricante</label>
-        <input formControlName="fabricante" placeholder="Ej. Pfizer" />
-      </div>
+    <div class="campo">
+      <label>Fabricante</label>
+      <input formControlName="fabricante" placeholder="Ej. Pfizer" />
+    </div>
 
-      <div class="campo">
-        <label>N° dosis</label>
-        <input formControlName="dosisTotales" type="number" min="1" />
-      </div>
+    <div class="campo">
+      <label>N° dosis</label>
+      <input formControlName="dosisTotales" type="number" min="1" />
+    </div>
 
-      <div class="campo">
-        <label>Vía de administración</label>
-        <select formControlName="viaAdministracion">
-          <option value="" disabled>Seleccione</option>
-          @for (opcion of opcionesViaAdministracion; track opcion) {
-            <option [value]="opcion">{{ opcion }}</option>
-          }
-        </select>
-      </div>
+    <div class="campo">
+      <label>Vía de administración</label>
+      <select formControlName="viaAdministracion">
+        <option value="" disabled>Seleccione</option>
+        @for (opcion of opcionesViaAdministracion; track opcion) {
+        <option [value]="opcion">{{ opcion }}</option>
+        }
+      </select>
+    </div>
 
-      <div class="campo">
-        <label>Temperatura (°C)</label>
-        <input formControlName="temperaturaAlmacenamiento" type="number" />
-      </div>
+    <div class="campo">
+      <label>Temperatura (°C)</label>
+      <input formControlName="temperaturaAlmacenamiento" type="number" />
+    </div>
 
-      <div class="campo">
-        <label>Lote</label>
-        <input formControlName="numeroLote" placeholder="Ej. LOTE-001" [readonly]="vacunaEnEdicion() !== null"/>
-      </div>
+    <div class="campo">
+      <label>Lote</label>
+      <input formControlName="numeroLote" placeholder="Ej. LOTE-001" [readonly]="vacunaEnEdicion() !== null" />
+    </div>
 
-      <div class="campo">
-        <label>Fecha de vencimiento</label>
-        <input formControlName="fechaVencimiento" type="date" [readonly]="vacunaEnEdicion() !== null"/>
-      </div>
+    <div class="campo">
+      <label>Fecha de vencimiento</label>
+      <input formControlName="fechaVencimiento" type="date" [readonly]="vacunaEnEdicion() !== null" />
+    </div>
 
-      <div class="campo">
-        <label>Cantidad que entra</label>
-        <input formControlName="cantidadRecibida" type="number" min="1" placeholder="Ej. 100" [readonly]="vacunaEnEdicion() !== null"/>
-      </div>      
+    <div class="campo">
+      <label>Cantidad que entra</label>
+      <input formControlName="cantidadRecibida" type="number" min="1" placeholder="Ej. 100"
+        [readonly]="vacunaEnEdicion() !== null" />
+    </div>
 
-      <button type="submit" class="btn-guardar" [disabled]="form.invalid">
-        {{ vacunaEnEdicion() ? 'Actualizar' : 'Guardar' }}
-      </button>
-    </form>
+    <button type="submit" class="btn-guardar" [disabled]="form.invalid">
+      {{ vacunaEnEdicion() ? 'Actualizar' : 'Guardar' }}
+    </button>
+  </form>
   }
 
   @if (cargando()) {
-    <p class="estado-carga">Cargando vacunas...</p>
+  <p class="estado-carga">Cargando vacunas...</p>
   } @else {
-    <table class="tabla">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Vacuna</th>
-          <th>Fabricante</th>
-          <th>Vía de administración</th>
-          <th>N° dosis</th>
-          <th>Lote</th>
-          <th>Cantidad</th>
-          <th>Vencimiento</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (vacuna of vacunasFiltradas(); track vacuna.id) {
-          @let lote = getLoteActual(vacuna.id);
-          <tr>
-            <td>{{ vacuna.codigo }}</td>
-            <td>{{ vacuna.nombre }}</td>
-            <td>{{ vacuna.fabricante }}</td>
-            <td>{{ vacuna.viaAdministracion }}</td>
-            <td>{{ vacuna.dosisTotales }}</td>
-            <td>{{ lote?.numeroLote || '—' }}</td>
-            <td>{{ lote?.stockActual ?? 0 }}</td>
-            <td>{{ lote?.fechaVencimiento || '—' }}</td>
-            <td>{{ vacuna.estado === 'ACTIVA' ? 'Activo' : 'Inactivo' }}</td>
-            <td>
-              <button class="btn-editar" (click)="editar(vacuna)" title="Editar vacuna">
-                <i class="bi bi-pencil-square"></i>
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+  <table class="tabla">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Vacuna</th>
+        <th>Fabricante</th>
+        <th>Vía de administración</th>
+        <th>N° dosis</th>
+        <th>Lote</th>
+        <th>Cantidad</th>
+        <th>Vencimiento</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (vacuna of vacunasFiltradas(); track vacuna.id) {
+      @let lote = getLoteActual(vacuna.id);
+      <tr>
+        <td>{{ vacuna.codigo }}</td>
+        <td>{{ vacuna.nombre }}</td>
+        <td>{{ vacuna.fabricante }}</td>
+        <td>{{ vacuna.viaAdministracion }}</td>
+        <td>{{ vacuna.dosisTotales }}</td>
+        <td>{{ lote?.numeroLote || '—' }}</td>
+        <td>{{ lote?.stockActual ?? 0 }}</td>
+        <td>{{ lote?.fechaVencimiento || '—' }}</td>
+        <td>{{ vacuna.estado === 'ACTIVA' ? 'Activo' : 'Inactivo' }}</td>
+        <td>
+          <button class="btn-editar" (click)="editar(vacuna)" title="Editar vacuna">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
 
-    @if (!hayResultados()) {
-      <p class="sin-resultados">No se encontraron vacunas con ese criterio.</p>
-    }
+  @if (!hayResultados()) {
+  <p class="sin-resultados">No se encontraron vacunas con ese criterio.</p>
+  }
   }
 </section>

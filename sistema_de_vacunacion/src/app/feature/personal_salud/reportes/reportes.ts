@@ -1,6 +1,6 @@
 // feature/personal_salud/reportes/reportes.ts
 import { Component, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { VacunacionService } from '../../../core/services/vacunacion';
 
@@ -33,21 +33,32 @@ export class ReportesComponent {
       fechaDesde: [primerDiaMes, Validators.required],
       fechaHasta: [hoy, Validators.required],
       tipoReporte: ['VACUNAS_APLICADAS', Validators.required]
-    });
+    }, { validators: this.rangoFechasValido });
+  }
+
+  /**
+   * Validador personalizado para comprobar que fechaDesde <= fechaHasta
+   */
+  private rangoFechasValido(group: AbstractControl): ValidationErrors | null {
+    const desde = group.get('fechaDesde')?.value;
+    const hasta = group.get('fechaHasta')?.value;
+
+    if (desde && hasta && new Date(desde) > new Date(hasta)) {
+      return { rangoInvalido: true };
+    }
+    return null;
   }
 
   exportar(formato: 'PDF' | 'EXCEL'): void {
     if (this.form.invalid) {
+      if (this.form.hasError('rangoInvalido')) {
+        this.mensajeError.set('La fecha "Desde" no puede ser posterior a la fecha "Hasta".');
+      }
       this.form.markAllAsTouched();
       return;
     }
 
     const { fechaDesde, fechaHasta, tipoReporte } = this.form.value;
-
-    if (new Date(fechaDesde) > new Date(fechaHasta)) {
-      this.mensajeError.set('La fecha "Desde" no puede ser posterior a la fecha "Hasta".');
-      return;
-    }
 
     this.mensajeError.set(null);
     this.mensajeExito.set(null);

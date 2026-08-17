@@ -17,12 +17,6 @@ export class AppHeader {
   ) {}
 
   cerrarSesion(): void {
-    const confirmar = window.confirm('¿Deseas cerrar sesión?');
-
-    if (!confirmar) {
-      return;
-    }
-
     this.authService.cerrarSesion();
     this.router.navigate(['/']);
   }

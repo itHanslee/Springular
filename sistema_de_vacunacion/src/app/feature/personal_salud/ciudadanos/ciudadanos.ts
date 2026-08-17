@@ -17,8 +17,9 @@ export class Ciudadanos implements OnInit {
   cargando = signal(true);
   terminoBusqueda = signal('');
   mostrarFormulario = signal(false);
+  mensajeError = signal<string | null>(null);
 
-    // Ciudadano que se está editando
+  // Ciudadano que se está editando
   ciudadanoEnEdicion = signal<Ciudadano | null>(null);
 
   opcionesTipoDocumento = ["CC", "RC", "TI", "CE", "PA"];
@@ -42,17 +43,55 @@ export class Ciudadanos implements OnInit {
     private personalSaludService: PersonalSaludService,
     private fb: FormBuilder
   ) {
-
     this.form = this.fb.group({
-      numeroDocumento: ['', Validators.required],
+      numeroDocumento: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(6),
+          Validators.maxLength(12)
+        ]
+      ],
       tipoDocumento: ['', Validators.required],
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telefono: ['', Validators.required],
+      nombre: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
+      ],
+      apellido: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
+      ],
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email,
+          Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        ]
+      ],
+      telefono: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(7),
+          Validators.maxLength(10)
+        ]
+      ],
       fechaNacimiento: ['', Validators.required],
       genero: ['', Validators.required],
-      direccion: ['', Validators.required]
+      direccion: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -87,13 +126,13 @@ export class Ciudadanos implements OnInit {
     this.mostrarFormulario.update(v => !v);
 
     if (!this.mostrarFormulario()) {
-      this.cancelarEdicion();
+      this.mensajeError.set(null);
     }
   }
 
 
   // EDITAR CIUDADANO
-  
+
 
   editar(ciudadano: Ciudadano): void {
 
@@ -113,9 +152,9 @@ export class Ciudadanos implements OnInit {
       direccion: ciudadano.direccion
     });
 
-   
+
     // CAMPOS QUE NO SE PUEDEN EDITAR
- 
+
 
     this.form.get('numeroDocumento')?.disable();
     this.form.get('tipoDocumento')?.disable();
@@ -124,9 +163,9 @@ export class Ciudadanos implements OnInit {
     this.form.get('fechaNacimiento')?.disable();
     this.form.get('genero')?.disable();
 
-  
+
     // CAMPOS QUE SÍ SE PUEDEN EDITAR
-  
+
 
     this.form.get('email')?.enable();
     this.form.get('telefono')?.enable();
@@ -149,7 +188,7 @@ export class Ciudadanos implements OnInit {
 
 
   // GUARDAR / ACTUALIZAR
- 
+
 
   guardar(): void {
 
@@ -161,9 +200,9 @@ export class Ciudadanos implements OnInit {
     const ciudadanoEditando =
       this.ciudadanoEnEdicion();
 
-  
+
     // ACTUALIZAR CIUDADANO
-   
+
 
     if (ciudadanoEditando) {
 
@@ -195,21 +234,19 @@ export class Ciudadanos implements OnInit {
           },
 
           error: error => {
-
-            console.error(
-              'Error al actualizar ciudadano:',
-              error
+            console.error('Error al registrar ciudadano:', error);
+            this.mensajeError.set(
+              error.error?.message ?? 'No se pudo guardar el ciudadano.'
             );
-
           }
         });
 
       return;
     }
 
-  
-  // REGISTRAR CIUDADANO
-   
+
+    // REGISTRAR CIUDADANO
+
 
     const datos =
       this.form.getRawValue() as Partial<Ciudadano>;

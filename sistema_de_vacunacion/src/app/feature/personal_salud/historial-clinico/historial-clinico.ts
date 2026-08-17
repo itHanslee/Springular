@@ -36,7 +36,15 @@ export class HistorialClinico {
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
-      documento: ['', Validators.required],
+      documento: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(6),
+          Validators.maxLength(12)
+        ]
+      ]
     });
   }
 

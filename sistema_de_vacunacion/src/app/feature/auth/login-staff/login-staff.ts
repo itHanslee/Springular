@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { catchError, finalize, switchMap, of } from 'rxjs';
 
 import { AuthService } from '../../../core/services/auth';
 import { LoginStaffRequest } from '../../../shared/models/login-staff-request.model';
@@ -24,8 +25,18 @@ export class LoginStaffComponent {
 
   constructor(private authService: AuthService, private router: Router) {
     this.loginForm = new FormGroup({
-      usuario: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-      contrasena: new FormControl('', { nonNullable: true, validators: [Validators.required] })
+      usuario: new FormControl('', {
+        nonNullable: true,
+        validators: [
+          Validators.required,
+          Validators.email,
+          Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        ]
+      }),
+      contrasena: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required]
+      })
     });
   }
 
@@ -48,28 +59,20 @@ export class LoginStaffComponent {
 
     const request: LoginStaffRequest = this.loginForm.getRawValue();
 
-    this.authService.loginStaff(request).subscribe({
+    this.authService.loginStaff(request).pipe(
+      switchMap(respuesta => {
+        return this.authService.cargarUsuarioActual().pipe(
+          catchError(() => of(null)), // Si falla cargarUsuarioActual, continúa el flujo hacia la navegación
+          switchMap(() => of(respuesta))
+        );
+      }),
+      finalize(() => this.cargando.set(false))
+    ).subscribe({
       next: (respuesta) => {
-        console.log('RESPUESTA LOGIN:', respuesta);
-        console.log('ROL RECIBIDO:', respuesta.rol);
-
-        this.authService.cargarUsuarioActual().subscribe({
-          next: () => {
-            this.cargando.set(false);
-            const rol = respuesta.rol;
-            const destino = rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
-            this.router.navigate([destino]);
-          },
-          error: () => {
-            this.cargando.set(false);
-            const rol = respuesta.rol;
-            const destino = rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
-            this.router.navigate([destino]);
-          }
-        });
+        const destino = respuesta.rol === 'ADMINISTRADOR' ? '/administrador' : '/personal-salud';
+        this.router.navigate([destino]);
       },
       error: (error: HttpErrorResponse) => {
-        this.cargando.set(false);
         this.mensajeError.set(
           error.status === 401
             ? 'Usuario o contraseña incorrectos.'

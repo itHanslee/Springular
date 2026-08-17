@@ -40,15 +40,12 @@ export class RegistrarVacunacion {
     private destroyRef: DestroyRef,
     private fb: FormBuilder
   ) {
-
-    const hoy = new Date()
-      .toISOString()
-      .substring(0, 10);
+    const hoy = new Date().toISOString().substring(0, 10);
 
     this.form = this.fb.group({
       fechaAplicacion: [
         hoy,
-        Validators.required
+        [Validators.required]
       ]
     });
   }
@@ -77,13 +74,24 @@ export class RegistrarVacunacion {
    * que ya está funcionando mediante ciudadanosFiltrados.
    */
   buscar(): void {
-
     const documento = this.documentoBusqueda().trim();
 
+    // 1. Validar que no esté vacío
     if (!documento) {
-      this.mensajeError.set(
-        'Ingrese un número de documento.'
-      );
+      this.mensajeError.set('Ingrese un número de documento.');
+      return;
+    }
+
+    // 2. Validar que contenga únicamente números
+    const regexSoloNumeros = /^\d+$/;
+    if (!regexSoloNumeros.test(documento)) {
+      this.mensajeError.set('El documento solo debe contener números.');
+      return;
+    }
+
+    // 3. Validar rango de longitud
+    if (documento.length < 6 || documento.length > 12) {
+      this.mensajeError.set('El documento debe tener entre 6 y 12 dígitos.');
       return;
     }
 
@@ -97,32 +105,19 @@ export class RegistrarVacunacion {
 
     this.personalSaludService
       .obtenerCiudadanoPorDocumento(documento)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-
         next: ciudadano => {
-
           this.buscando.set(false);
-
           this.seleccionarCiudadano(ciudadano);
         },
-
         error: (error: HttpErrorResponse) => {
-
           this.buscando.set(false);
-
-          console.error(
-            'Error al buscar ciudadano:',
-            error
-          );
-
+          console.error('Error al buscar ciudadano:', error);
           this.mensajeError.set(
             error.status === 404
               ? 'No se encontró ningún ciudadano con ese documento.'
-              : error.error?.message ??
-              'No se pudo consultar el ciudadano.'
+              : error.error?.message ?? 'No se pudo consultar el ciudadano.'
           );
         }
       });

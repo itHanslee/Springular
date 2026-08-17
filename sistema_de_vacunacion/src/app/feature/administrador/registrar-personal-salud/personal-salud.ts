@@ -61,29 +61,50 @@ export class PersonalSaludCo implements OnInit {
 
       numeroDocumento: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(6),
+          Validators.maxLength(12)
+        ]
       ],
 
       nombre: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
       ],
 
       apellido: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
       ],
 
       cargo: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/),
+          Validators.minLength(3),
+          Validators.maxLength(50)
+        ]
       ],
 
       email: [
         '',
         [
           Validators.required,
-          Validators.email
+          Validators.email,
+          Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
         ]
       ],
 
@@ -97,23 +118,19 @@ export class PersonalSaludCo implements OnInit {
 
       telefono: [
         '',
-        Validators.required
+        [
+          Validators.required,
+          Validators.pattern(/^\d+$/),
+          Validators.minLength(7),
+          Validators.maxLength(10)
+        ]
       ],
 
-      fechaNacimiento: [
-        '',
-        Validators.required
-      ],
+      fechaNacimiento: ['', Validators.required],
 
-      genero: [
-        '',
-        Validators.required
-      ],
+      genero: ['', Validators.required],
 
-      direccion: [
-        '',
-        Validators.required
-      ]
+      direccion: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -261,12 +278,12 @@ export class PersonalSaludCo implements OnInit {
 
     const accion = enEdicion
       ? this.administradorService.actualizarPersonalSalud(
-          enEdicion.id,
-          datos
-        )
+        enEdicion.id,
+        datos
+      )
       : this.administradorService.registrarPersonalSalud(
-          datos
-        );
+        datos
+      );
 
     accion.subscribe({
       next: () => {

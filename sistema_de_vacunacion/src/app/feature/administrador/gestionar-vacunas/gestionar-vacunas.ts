@@ -1,9 +1,8 @@
-// feature/administrador/gestionar-vacunas/gestionar-vacunas.ts
 import { Component, OnInit, signal, computed } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { VacunaService } from '../../../core/services/vacuna';
 import { InventarioLote, Vacuna, viaAdministracion } from '../../../shared/models/vacuna.model';
-import { switchMap } from 'rxjs/internal/operators/switchMap';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-gestionar-vacunas',
@@ -18,8 +17,9 @@ export class GestionarVacunas implements OnInit {
   terminoBusqueda = signal('');
   mostrarFormulario = signal(false);
   vacunaEnEdicion = signal<Vacuna | null>(null);
-  lotesPorVacuna =signal<Record<number, InventarioLote[]>>({});
+  lotesPorVacuna = signal<Record<number, InventarioLote[]>>({});
   opcionesViaAdministracion: viaAdministracion[] = ['Oral', 'Intramuscular', 'Subcutanea', 'Intradermica'];
+  mensajeError = signal<string | null>(null);
 
   vacunasFiltradas = computed(() => {
     const termino = this.terminoBusqueda().toLowerCase().trim();
@@ -40,16 +40,83 @@ export class GestionarVacunas implements OnInit {
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
-      codigo: ['', Validators.required],
-      nombre: ['', Validators.required],
-      fabricante: ['', Validators.required],
-      dosisTotales: [1, [Validators.required, Validators.min(1)]],
+      codigo: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z0-9\-_]{3,15}$/)
+        ]
+      ],
+      nombre: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(100)
+        ]
+      ],
+      fabricante: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.]+$/),
+          Validators.minLength(2),
+          Validators.maxLength(100)
+        ]
+      ],
+      dosisTotales: [
+        1,
+        [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10)
+        ]
+      ],
       viaAdministracion: ['', Validators.required],
-      temperaturaAlmacenamiento: [null, Validators.required],
-      numeroLote: ['', Validators.required],
-      cantidadRecibida: [null, [Validators.required, Validators.min(1)]],
-      fechaVencimiento: ['', Validators.required]
+      temperaturaAlmacenamiento: [
+        null,
+        [
+          Validators.required,
+          Validators.min(-80),
+          Validators.max(25)
+        ]
+      ],
+      numeroLote: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[A-Za-z0-9\-_]{3,20}$/)
+        ]
+      ],
+      cantidadRecibida: [
+        null,
+        [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(100000)
+        ]
+      ],
+      fechaVencimiento: [
+        '',
+        [
+          Validators.required,
+          this.fechaFuturaValidator
+        ]
+      ]
     });
+  }
+
+  /**
+   * Validador para asegurar que la fecha de vencimiento sea posterior a hoy.
+   */
+  private fechaFuturaValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const fechaIngresada = new Date(control.value);
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    return fechaIngresada > hoy ? null : { fechaPasada: true };
   }
 
   ngOnInit(): void {
@@ -60,85 +127,59 @@ export class GestionarVacunas implements OnInit {
     this.cargando.set(true);
     this.vacunaService
       .listarInventarioCompleto()
-      .subscribe({next: resultados => {
+      .subscribe({
+        next: resultados => {
           const vacunas = resultados.map(resultado => resultado.vacuna);
           const lotes: Record<number, InventarioLote[]> = {};
-          resultados.forEach(
-            resultado => {
-              lotes[
-                resultado.vacuna.id
-              ] = resultado.lotes;
-
-            }
-          );
+          resultados.forEach(resultado => {
+            lotes[resultado.vacuna.id] = resultado.lotes;
+          });
 
           this.vacunas.set(vacunas);
           this.lotesPorVacuna.set(lotes);
           this.cargando.set(false);
         },
-
-
         error: err => {
-
-          console.error(
-            'Error al cargar vacunas',
-            err
-          );
-
+          console.error('Error al cargar vacunas', err);
           this.cargando.set(false);
         }
-
       });
   }
 
-getLoteActual(vacunaId: number): InventarioLote | undefined {
-  const lotes = this.lotesPorVacuna()[vacunaId];
-  if (!lotes || lotes.length === 0) return undefined;
+  getLoteActual(vacunaId: number): InventarioLote | undefined {
+    const lotes = this.lotesPorVacuna()[vacunaId];
+    if (!lotes || lotes.length === 0) return undefined;
 
-  return lotes.find(lote => lote.activo) ?? lotes[0];
-}
-  // BUSCAR
-
-  buscar(valor: string): void {
-    this.terminoBusqueda.set(
-      valor
-    );
+    return lotes.find(lote => lote.activo) ?? lotes[0];
   }
 
-
-  // MOSTRAR / OCULTAR FORMULARIO
+  buscar(valor: string): void {
+    this.terminoBusqueda.set(valor);
+  }
 
   toggleFormulario(): void {
-
     this.mostrarFormulario.update(valor => !valor);
     if (!this.mostrarFormulario()) {
+      this.mensajeError.set(null);
       this.cancelarEdicion();
     }
   }
-
-
-  // EDITAR
 
   editar(vacuna: Vacuna): void {
     this.vacunaEnEdicion.set(vacuna);
     this.mostrarFormulario.set(true);
 
     this.form.patchValue({
-      codigo:vacuna.codigo,
-      nombre:vacuna.nombre,
-      fabricante:vacuna.fabricante,
-      dosisTotales:vacuna.dosisTotales,
-      viaAdministracion:vacuna.viaAdministracion,
-      temperaturaAlmacenamiento:vacuna.temperaturaAlmacenamiento
-
+      codigo: vacuna.codigo,
+      nombre: vacuna.nombre,
+      fabricante: vacuna.fabricante,
+      dosisTotales: vacuna.dosisTotales,
+      viaAdministracion: vacuna.viaAdministracion,
+      temperaturaAlmacenamiento: vacuna.temperaturaAlmacenamiento
     });
-
 
     this.desactivarValidadoresLote();
   }
-
-
-  // VALIDADORES DEL LOTE
 
   private desactivarValidadoresLote(): void {
     this.form.get('numeroLote')?.clearValidators();
@@ -149,25 +190,27 @@ getLoteActual(vacunaId: number): InventarioLote | undefined {
     this.form.get('cantidadRecibida')?.updateValueAndValidity();
   }
 
-
   private activarValidadoresLote(): void {
-    this.form.get('numeroLote')?.setValidators(Validators.required);
-    this.form.get('fechaVencimiento')?.setValidators(Validators.required);
-    this.form.get('cantidadRecibida')?.setValidators([Validators.required, Validators.min(1)]);
+    this.form.get('numeroLote')?.setValidators([
+      Validators.required,
+      Validators.pattern(/^[A-Za-z0-9\-_]{3,20}$/)
+    ]);
+    this.form.get('fechaVencimiento')?.setValidators([
+      Validators.required,
+      this.fechaFuturaValidator
+    ]);
+    this.form.get('cantidadRecibida')?.setValidators([
+      Validators.required,
+      Validators.min(1),
+      Validators.max(100000)
+    ]);
     this.form.get('numeroLote')?.updateValueAndValidity();
     this.form.get('fechaVencimiento')?.updateValueAndValidity();
     this.form.get('cantidadRecibida')?.updateValueAndValidity();
   }
 
-
-  // CANCELAR
- 
-
   cancelarEdicion(): void {
-      this.vacunaEnEdicion.set(
-      null
-    );
-
+    this.vacunaEnEdicion.set(null);
 
     this.form.reset({
       codigo: '',
@@ -183,196 +226,95 @@ getLoteActual(vacunaId: number): InventarioLote | undefined {
     this.activarValidadoresLote();
   }
 
-  // GUARDAR
- 
   guardar(): void {
-
     if (this.form.invalid) {
-
       this.form.markAllAsTouched();
-
       return;
     }
 
-
-    const enEdicion =
-      this.vacunaEnEdicion();
-
-
-    const valores =
-      this.form.getRawValue();
-
-
-    // DATOS DE LA VACUNA
+    const enEdicion = this.vacunaEnEdicion();
+    const valores = this.form.getRawValue();
 
     const vacuna: Partial<Vacuna> = {
-      codigo:valores.codigo,
-      nombre:valores.nombre,
-      fabricante:valores.fabricante,
-      dosisTotales:valores.dosisTotales,
-      viaAdministracion:valores.viaAdministracion,
-      temperaturaAlmacenamiento:valores.temperaturaAlmacenamiento
+      codigo: valores.codigo,
+      nombre: valores.nombre,
+      fabricante: valores.fabricante,
+      dosisTotales: valores.dosisTotales,
+      viaAdministracion: valores.viaAdministracion,
+      temperaturaAlmacenamiento: valores.temperaturaAlmacenamiento
     };
 
-
-    // EDICIÓN
-
     if (enEdicion) {
-
       this.vacunaService
-        .actualizar(
-          enEdicion.id,
-          vacuna
-        )
+        .actualizar(enEdicion.id, vacuna)
         .subscribe({
-
           next: () => {
-
-            this.mostrarFormulario
-              .set(false);
-
+            this.mostrarFormulario.set(false);
             this.cancelarEdicion();
-
             this.cargarVacunas();
           },
-
-
           error: err => {
-
-            console.error(
-              'Error al actualizar vacuna',
-              err
-            );
-
-            alert(
-              this.obtenerMensajeError(
-                err,
-                'No se pudo actualizar la vacuna.'
-              )
+            console.error('Error al actualizar vacuna', err);
+            this.mensajeError.set(
+              this.obtenerMensajeError(err, 'No se pudo actualizar la vacuna.')
             );
           }
-
         });
 
       return;
     }
 
-    // NUEVA VACUNA
-  
     this.vacunaService
       .registrar(vacuna)
-
       .pipe(
-
-        switchMap(
-          vacunaCreada => {
-
-            const lote:
-              Omit<InventarioLote,'id' |'stockActual' |'activo'> = {
-                numeroLote:valores.numeroLote,
-                cantidadRecibida:valores.cantidadRecibida,
-                fechaVencimiento:valores.fechaVencimiento,
-                idVacuna:vacunaCreada.id
-              };
-            return this.vacunaService
-              .registrarLote(lote);
-          }
-        )
-
+        switchMap(vacunaCreada => {
+          const lote: Omit<InventarioLote, 'id' | 'stockActual' | 'activo'> = {
+            numeroLote: valores.numeroLote,
+            cantidadRecibida: valores.cantidadRecibida,
+            fechaVencimiento: valores.fechaVencimiento,
+            idVacuna: vacunaCreada.id
+          };
+          return this.vacunaService.registrarLote(lote);
+        })
       )
-
       .subscribe({
-
         next: () => {
-
-          this.mostrarFormulario
-            .set(false);
-
+          this.mostrarFormulario.set(false);
           this.cancelarEdicion();
-
           this.cargarVacunas();
         },
-
-
         error: err => {
-
-          console.error('Error al registrar vacuna/lote',
-            err);
-
-
-          alert(
-            this.obtenerMensajeError(
-              err,'No se pudo registrar la vacuna y el lote.'));
+          console.error('Error al registrar vacuna/lote', err);
+          this.mensajeError.set(
+            this.obtenerMensajeError(err, 'No se pudo registrar la vacuna y el lote.')
+          );
         }
-
       });
   }
 
-  // LOTES
-
-  obtenerLotes(
-    idVacuna: number
-  ): InventarioLote[] {
-
-    return this.lotesPorVacuna()[idVacuna]
-      ?? [];
+  obtenerLotes(idVacuna: number): InventarioLote[] {
+    return this.lotesPorVacuna()[idVacuna] ?? [];
   }
 
-
-  obtenerStockTotal(
-    idVacuna: number
-  ): number {
-
-    return this.obtenerLotes(
-      idVacuna
-    )
-      .filter(
-        lote =>
-          lote.activo
-      )
-      .reduce(
-        (total, lote) =>
-          total + (lote.stockActual ?? 0),
-        0
-      );
+  obtenerStockTotal(idVacuna: number): number {
+    return this.obtenerLotes(idVacuna)
+      .filter(lote => lote.activo)
+      .reduce((total, lote) => total + (lote.stockActual ?? 0), 0);
   }
 
+  obtenerLotePrincipal(idVacuna: number): InventarioLote | null {
+    const lotes = this.obtenerLotes(idVacuna)
+      .filter(lote => lote.activo && lote.stockActual > 0)
+      .sort((a, b) => a.fechaVencimiento.localeCompare(b.fechaVencimiento));
 
-  obtenerLotePrincipal(
-    idVacuna: number
-  ): InventarioLote | null {
-
-    const lotes =
-      this.obtenerLotes(idVacuna)
-        .filter(
-          lote =>
-            lote.activo &&
-            lote.stockActual > 0
-        )
-        .sort(
-          (a, b) =>
-            a.fechaVencimiento.localeCompare(
-              b.fechaVencimiento
-            )
-        );
-
-
-    return lotes.length > 0
-      ? lotes[0]
-      : null;
+    return lotes.length > 0 ? lotes[0] : null;
   }
 
-
-
-  // MENSAJE DE ERROR
- 
-
-  private obtenerMensajeError(
-    error: any, mensajePorDefecto: string): string {
-      return (
-        error?.error?.message ??
-        error?.error ??
-        mensajePorDefecto
+  private obtenerMensajeError(error: any, mensajePorDefecto: string): string {
+    return (
+      error?.error?.message ??
+      error?.error ??
+      mensajePorDefecto
     );
   }
 }
