@@ -6,4 +6,5 @@ export interface RegistrarVacunacionRequest {
   dosis: NumeroDosis;
   observaciones?: string;
   reaccionesAdversas?: boolean;
+  fechaAplicacion: string;
 }

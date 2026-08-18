@@ -249,6 +249,8 @@ export class RegistrarVacunacion {
         idInventario:
           pendiente.idInventario,
 
+        fechaAplicacion: this.form.value.fechaAplicacion,
+
         dosis:
           pendiente.dosis,
 
