@@ -20,7 +20,7 @@ export class Carnet implements OnInit {
   constructor(
     private authService: AuthService,
     private ciudadanoService: CiudadanoService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarCarnet();
@@ -46,7 +46,7 @@ export class Carnet implements OnInit {
     });
   }
 
-    descargarCarnet(): void {
+  descargarCarnet(): void {
 
     const datos = this.ciudadano();
 
@@ -66,8 +66,15 @@ export class Carnet implements OnInit {
 
         next: (archivo: Blob) => {
 
+          console.log('=== CARNET ===');
+          console.log('Blob:', archivo);
+          console.log('Tamaño:', archivo.size);
+          console.log('Tipo:', archivo.type);
+
           const url =
             window.URL.createObjectURL(archivo);
+
+          console.log('URL creada:', url);
 
           const enlace =
             document.createElement('a');
@@ -76,11 +83,22 @@ export class Carnet implements OnInit {
 
           enlace.download =
             'carnet-vacunacion-delta.pdf';
+
+          console.log('Enlace:', enlace);
+
+          document.body.appendChild(enlace);
+
+          console.log('Ejecutando click...');
+
           enlace.click();
+
+          document.body.removeChild(enlace);
 
           window.URL.revokeObjectURL(url);
 
           this.descargando.set(false);
+
+          console.log('Descarga finalizada');
         },
 
         error: (error: unknown) => {
