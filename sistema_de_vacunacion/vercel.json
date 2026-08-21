@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/sistema_de_vacunacion",
+  "outputDirectory": "dist/sistema_de_vacunacion/browser",
   "rewrites": [
     {
       "source": "/(.*)",
