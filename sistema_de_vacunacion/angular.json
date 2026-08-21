@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "sistema_de_vacuancion": {
+    "sistema_de_vacunacion": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "sistema_de_vacuancion:build:production"
+              "buildTarget": "sistema_de_vacunacion:build:production"
             },
             "development": {
-              "buildTarget": "sistema_de_vacuancion:build:development"
+              "buildTarget": "sistema_de_vacunacion:build:development"
             }
           },
           "defaultConfiguration": "development"
