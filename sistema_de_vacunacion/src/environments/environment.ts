@@ -1,4 +1,4 @@
-export const API_BASE_URL = { production: false, apiUrl: 'https://backspring-zmcco.onrender.com' };
+export const API_BASE_URL = { production: false, apiUrl: 'https://backspring-production-4738.up.railway.app/' };
 
 export const API = {
 
